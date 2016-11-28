@@ -2,18 +2,25 @@
   <div id="app">
     <img src="./assets/logo.png">
     <hello></hello>
+    <world></world>
+    <MailApp></MailApp>
   </div>
 </template>
 
 <script>
 import Hello from './components/Hello'
+import World from './components/World'
+import MailApp from './components/MailApp'
 
 export default {
   name: 'app',
   components: {
-    Hello
+    Hello,
+    World,
+    MailApp
   }
 }
+
 </script>
 
 <style>
