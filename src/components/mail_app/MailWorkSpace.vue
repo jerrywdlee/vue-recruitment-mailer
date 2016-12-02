@@ -1,54 +1,31 @@
 <template>
-  <!--
-  <div class="parient">
-    <div id="div_f" class="editable front" contentEditable="true" @keyup="setMessage"></div>
-    <div id="div_b" class="editable back" v-html="backMessage"></div>
-  </div>
-  -->
-
-  <div class="MailApp">
-    <div v-html="messageF">
-      <span ></span>
+  <div class="mail_app">
+    <div class="tagbar">
+      <div class="tags">
+        <table>
+          <tr v-for="tag in tags">
+            <td>{{ tag }}</td>
+            <td>del</td>
+            <td>edit</td>
+          </tr>
+        </table>
+      </div>
     </div>
-    <MailWorkSpace></MailWorkSpace>
+    <div class="workspace">
+      <div id="div_f" class="editable front" contentEditable="true" @keyup="setMessage"></div>
+      <div id="div_b" class="editable back" v-html="backMessage"></div>
+    </div>
   </div>
 </template>
 
 <script>
-  import MailWorkSpace from './mail_app/MailWorkSpace'
-
-  export default {
-    name: 'MailApp',
-    data () {
-      return {
-        messageF: 'Plz \n Type \n Sth.'
-      }
-    },
-    components: {
-      // Hello,
-      // World,
-      // MailApp
-      MailWorkSpace
-    },
-    computed: {
-      backMessage: function () {
-        // console.log('MailWorkSpace.backMessage')
-        // console.log(MailWorkSpace.backMessage)
-        // return MailWorkSpace.backMessage
-      }
-    }
-  }
-</script>
-<!--
-<script>
-import MailWorkSpace from './components/mail_app/MailWorkSpace'
-
 export default {
-  name: 'MailApp',
+  name: 'MailWorkSpace',
   data () {
     return {
       messageF: 'Plz \n Type \n Sth.',
-      messageB: ''
+      messageB: '',
+      tags: ['aaa', 'bbb']
       // rawTags: [],
       // tagReg: null
     }
@@ -82,7 +59,7 @@ export default {
       }
 
       // this.messageB = this.messageF
-
+      // eventHub.$emit('backMessage',this.messageB)
       return this.messageB
     },
     rawTags: function () {
@@ -104,25 +81,33 @@ export default {
       // this.messageF = e.target.innerHTML // like `<div>aaa</div>`
       // this.messageF = e.target.textContent // this is text without newlines
       this.messageF = e.target.innerText
+      this.scanTags()
       // let tmpTags = this.messageF.match(/@#(?:.*?)#@/g)
       // this.rawTags = tmpTags || []
       // this.tagReg = new RegExp('(' + this.rawTags.join('|') + ')', 'g')
       // this.canRowTags()
     },
-    scanRowTags: function (e) {
+    scanTags: function (e) {
       /* eg: Tested at http://regex-testdrive.com/ja/dotest
         var str = `@#1234@#aaa#@1234@#aaa#@5678@#bbb#@\ncccd@dddd#@@#eee\nfff#@`
         str.match(/@#(?:.*?)#@/g)
         ["@#1234@#aaa#@", "@#aaa#@", "@#bbb#@"]
       */
       // this.rawTags = this.messageF.match(/@#(?:.*?)#@/g)
+      let tmpRawTags = this.rawTags ? this.rawTags.map(function (x, i, self) {
+        return x.replace(/@#|#@/g, '')
+      }) : []
+      let tmpTagArry = this.tags.concat(tmpRawTags)
+      this.tags = tmpTagArry.filter(function (x, i, self) {
+        return self.indexOf(x) === i // delete duplicates
+      })
+      console.log(this.tags)
+      return this.tags
     }
   }
 }
 
 </script>
--->
-<!--
 <style media="screen">
   span.tagSpan{
     /* background: lavender; */
@@ -130,9 +115,9 @@ export default {
     background: #ffd1cc;
     border: 0px solid #ffd1cc;
     position: relative;
-    -moz-border-radius:    5px;
-    -webkit-border-radius: 5px;
-    border-radius:         5px;
+    -moz-border-radius:    10px;
+    -webkit-border-radius: 10px;
+    border-radius:         10px;
   }
 </style>
 
@@ -140,21 +125,41 @@ export default {
   div{
     border-radius:5px;
     float:left;
+    padding:10px;
     /*position:relative;*/
   }
-
-  div.parient{
-    position:relative;
-    width:90%;
-    border: 2px solid Cyan;
-    padding: 0px;
-    text-align:center;
+  div.mail_app{
+    width:100%;
+  }
+  div.tags, div.workspace{
     overflow-x: hidden; /* Hide horizontal scrollbar */
     overflow-y: scroll; /* Add vertical scrollbar */
   }
-
-  div.editable{
+  div.tagbar{
+    border: 2px solid magenta;
+    margin-right: 10px;
+    padding-left: 3px;
+    min-width:100px;
+    max-width:none;
+    height: 293px;
   }
+  div.tags{
+    border: 0.5px solid red;
+    width: 95%;
+    padding:5px;
+    height: 200px;
+    text-align: left;
+  }
+  div.workspace{
+    position:relative;
+    width:80%;
+    min-width:300px;
+    max-width:none;
+    border: 2px solid Cyan;
+    padding: 0px;
+    text-align:center;
+  }
+
 
   div.front,div.back{
     text-align: left;
@@ -183,4 +188,3 @@ export default {
   }
 
 </style>
--->
