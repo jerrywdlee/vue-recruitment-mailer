@@ -1,20 +1,34 @@
 <template>
   <div class="mail_app">
+    <div class="selectedTagStyles">
+    </div>
     <div class="tagbar">
       <div class="tags">
         <table>
           <tr v-for="tag in tags">
             <td>{{ tag }}</td>
-            <td>del</td>
+            <td>
+              <input type="checkbox" :value="tag" v-model="selectedTags">
+            </td>
+            <td><a href="javascript:void(0);" @click="highLightTag( tag )">High</a></td>
             <td>edit</td>
           </tr>
         </table>
       </div>
+      <div class="toolBar">
+
+      </div>
     </div>
-    <div class="workspace">
-      <div id="div_f" class="editable front" contentEditable="true" @keyup="setMessage"></div>
-      <div id="div_b" class="editable back" v-html="backMessage"></div>
+    <div class="workspace_wrap">
+      <div class="workspace">
+        <div id="div_f" class="editable front" contentEditable="true" @keyup="setMessage"></div>
+        <div id="div_b" class="editable back" v-html="backMessage"></div>
+      </div>
+      <div class="toolBar">
+
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -25,7 +39,8 @@ export default {
     return {
       messageF: 'Plz \n Type \n Sth.',
       messageB: '',
-      tags: ['aaa', 'bbb']
+      tags: ['aaa', 'bbb'],
+      selectedTags: []
       // rawTags: [],
       // tagReg: null
     }
@@ -52,7 +67,8 @@ export default {
         this.messageB = this.messageF
                         // .replace(/\r|\n|\r\n/g, '<br>')
                         .replace(tmpReg, (match) => {
-                          return `<span class='tagSpan'>${match}</span>`
+                          let tagName = match.replace(/@#|#@/g, '')
+                          return `<span class='tagSpan vmail_${tagName}'>${match}</span>`
                         }).replace(/\r|\n|\r\n/g, '<br>')
       } else {
         this.messageB = this.messageF.replace(/\r|\n|\r\n/g, '<br>')
@@ -103,16 +119,45 @@ export default {
       })
       console.log(this.tags)
       return this.tags
+    },
+    highLightTag: function (tagName) {
+      console.log(tagName)
+      // document.querySelector('.my_style')
+      // .innerHTML = `<style>span.${tagName}{background: #ffd1cc;}</style>`
+      // document.
+      /*
+      this.messageB
+      .replace(`<span class='tagSpan'>@#${tagName}#@</span>`,
+              `<span class='perDelTagSpan'>@#${tagName}#@</span>`)
+              */
+    }
+  },
+  watch: {
+    selectedTags: function (val) {
+      let selectedTagClasses = val.map(function (x, i, self) {
+        return 'vmail_' + x
+      }).join(',.')
+      console.log(selectedTagClasses)
+      if (selectedTagClasses !== '') {
+        console.log(`<style>.${selectedTagClasses}{background: #ffd1cc;}</style>`)
+        document.querySelector('.selectedTagStyles')
+        .innerHTML = `<style>.${selectedTagClasses}{background: #ffd1cc !important;}</style>`
+      } else {
+        document.querySelector('.selectedTagStyles')
+        .innerHTML = ``
+      }
     }
   }
 }
 
 </script>
+
 <style media="screen">
   span.tagSpan{
     /* background: lavender; */
     /* background: MistyRose; */
-    background: #ffd1cc;
+    /* background: #ffd1cc; */
+    background: #BFE6D0;
     border: 0px solid #ffd1cc;
     position: relative;
     -moz-border-radius:    10px;
@@ -131,31 +176,42 @@ export default {
   div.mail_app{
     width:100%;
   }
+  div.workspace_wrap{
+    position: relative;
+    border: 1px solid green;
+    width: 65%;
+    min-width: 300px;
+    padding-left: 4.5px;
+    height: 325px;
+  }
   div.tags, div.workspace{
     overflow-x: hidden; /* Hide horizontal scrollbar */
     overflow-y: scroll; /* Add vertical scrollbar */
   }
   div.tagbar{
-    border: 2px solid magenta;
+    position: relative;
+    float: left;
+    border: 1px solid magenta;
     margin-right: 10px;
     padding-left: 3px;
     min-width:100px;
     max-width:none;
-    height: 293px;
+    height: 325px;
   }
   div.tags{
     border: 0.5px solid red;
     width: 95%;
     padding:5px;
-    height: 200px;
+    height: 88%;
     text-align: left;
   }
   div.workspace{
     position:relative;
-    width:80%;
-    min-width:300px;
+    width:100%;
+    min-width:250px;
     max-width:none;
-    border: 2px solid Cyan;
+    height: 90%;
+    border: 0.5px solid Cyan;
     padding: 0px;
     text-align:center;
   }
@@ -164,7 +220,7 @@ export default {
   div.front,div.back{
     text-align: left;
     width: 99%;
-    height: 300px;
+    height: 95%;
     border: 2px solid #ccc;
     padding: 5px;
     top:0px;
@@ -185,6 +241,16 @@ export default {
     /*margin-left:-40%;*/
     z-index:-1;
     color: rgba(0,0,0,0.25);
+  }
+
+  div.toolBar{
+    padding: 0;
+    background: #ecf0f5;
+    height: 35px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
   }
 
 </style>
