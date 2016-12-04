@@ -1,0 +1,14 @@
+h1 {
+  /* background: red; */
+  color: green;
+}
+
+@media (min-width: 500px) and (max-width: 600px) {
+  body {
+    background: #ccc;
+  }
+
+  .desc:after {
+    content:" In fact, it's between 500px and 600px wide.";
+  }
+}

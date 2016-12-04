@@ -1,8 +1,15 @@
 <template>
   <div id="app">
+    <!--
+    <div id="glayer">
+
+    </div>
+  -->
     <img src="./assets/logo.png">
+    <!--
     <hello></hello>
     <world></world>
+    -->
     <MailApp></MailApp>
   </div>
 </template>

@@ -7,9 +7,11 @@
   -->
 
   <div class="MailApp">
+    <!--
     <div v-html="messageF">
       <span ></span>
     </div>
+    -->
     <MailWorkSpace></MailWorkSpace>
   </div>
 </template>

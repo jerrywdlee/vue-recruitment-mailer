@@ -16,7 +16,10 @@
         </table>
       </div>
       <div class="toolBar">
-
+        <button class="uk-button uk-button-danger">
+          <i class="uk-icon-justify uk-icon-trash"></i>
+          <span class="vmail_label">Delete</span>
+        </button>
       </div>
     </div>
     <div class="workspace_wrap">
@@ -179,8 +182,8 @@ export default {
   div.workspace_wrap{
     position: relative;
     border: 1px solid green;
-    width: 65%;
-    min-width: 300px;
+    width: 65vw;
+    min-width: 250px;
     padding-left: 4.5px;
     height: 325px;
   }
@@ -192,17 +195,18 @@ export default {
     position: relative;
     float: left;
     border: 1px solid magenta;
+    margin-left: -10px;
     margin-right: 10px;
     padding-left: 3px;
-    min-width:100px;
-    max-width:none;
+    min-width:120px;
+    max-width:20vw;
     height: 325px;
   }
   div.tags{
     border: 0.5px solid red;
     width: 95%;
     padding:5px;
-    height: 88%;
+    height: 87%;
     text-align: left;
   }
   div.workspace{
@@ -244,13 +248,20 @@ export default {
   }
 
   div.toolBar{
+    border-radius:0 0 5px 5px;
     padding: 0;
     background: #ecf0f5;
-    height: 35px;
+    height: 40px;
     width: 100%;
     position: absolute;
     left: 0;
     bottom: 0;
+  }
+
+  div.toolBar button{
+    margin-top: 5px;
+    margin-right: 10px;
+    float: right;
   }
 
 </style>
