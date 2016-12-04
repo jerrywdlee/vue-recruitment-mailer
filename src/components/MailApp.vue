@@ -1,18 +1,6 @@
 <template>
-  <!--
-  <div class="parient">
-    <div id="div_f" class="editable front" contentEditable="true" @keyup="setMessage"></div>
-    <div id="div_b" class="editable back" v-html="backMessage"></div>
-  </div>
-  -->
-
   <div class="MailApp">
-    <!--
-    <div v-html="messageF">
-      <span ></span>
-    </div>
-    -->
-    <MailWorkSpace></MailWorkSpace>
+    <MailWorkSpace v-on:openModal="openModal"></MailWorkSpace>
   </div>
 </template>
 
@@ -37,6 +25,12 @@
         // console.log('MailWorkSpace.backMessage')
         // console.log(MailWorkSpace.backMessage)
         // return MailWorkSpace.backMessage
+      }
+    },
+    methods: {
+      openModal: function (val, e) {
+        console.log(val)
+        console.log(e)
       }
     }
   }
