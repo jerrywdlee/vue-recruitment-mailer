@@ -48,17 +48,74 @@
     </div>
     <div class="workspace_wrap">
       <div class="adress" style="padding:0;padding-bottom:2px;">
-        <div id="to_address" style="width:inherit;border: 0.5px solid #ffd1cc;float:none;">
-            <span>To:</span> <span>aaa@example.com</span>
+        <div style="width:inherit;border: 0.5px solid #ffd1cc;float:none;">
+          <table>
+            <tr>
+              <td class="address_label">
+                <span>To:</span>
+              </td>
+              <td>
+                <span id="to_address" contentEditable="true" @blur="setLastFocusId">
+                  aaa@example.com
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td class="address_label">
+                <span>CC:</span>
+              </td>
+              <td>
+                <span id="cc_address" contentEditable="true" @blur="setLastFocusId">
+                  bbb@example.com
+                </span>
+              </td>
+            </tr>
+          </table>
+            <!--
+            <span>To:</span>
+            <span id="to_address" contentEditable="true" @blur="setLastFocusId">
+              aaa@example.com</span>
+            -->
+              <!--
+              <input id="to_address" type="text" name="name" value="aaa@example.com">
+            -->
+
+            <!--
             <span>CC:</span> <span>bbb@example.com</span>
             <span>Bcc:</span> <span>bbb@example.com</span>
+          -->
         </div>
-        <div id="to_address" style="width:inherit;border: 0.5px solid #ffd1cc;margin-top:2px;">
-            <span>Sub:</span> <span>AAAAAA</span>
+        <!--
+        <div style="width:inherit;border: 0.5px solid #ffd1cc;float:none;margin-top:2px;">
+          <span>CC:</span>
+          <span id="cc_address" contentEditable="true" @blur="setLastFocusId">
+            bbb@example.com
+          </span>
+        </div>
+      -->
+        <div style="width:inherit;border: 0.5px solid #ffd1cc;margin-top:2px;">
+          <table>
+            <tr>
+              <td class="address_label">
+                <span>Sub:</span>
+              </td>
+              <td>
+                <span id="subject" contentEditable="true" @blur="setLastFocusId">
+                  AAAAAA
+                </span>
+              </td>
+            </tr>
+          </table>
+          <!--
+            <span>Sub:</span>
+            <span id="subject" contentEditable="true" @blur="setLastFocusId">
+              AAAAAA
+            </span>
+          -->
         </div>
       </div>
       <div class="workspace">
-        <div id="div_f" class="editable front" contentEditable="true" @keyup="setMessage"></div>
+        <div id="div_f" class="editable front" contentEditable="true" @keyup="setMessage" @blur="setLastFocusId"></div>
         <div id="div_b" class="editable back" v-html="backMessage"></div>
       </div>
       <div class="toolBar">
@@ -78,7 +135,7 @@ export default {
     return {
       messageF: 'Plz \n Type \n Sth.',
       messageB: '',
-      tags: ['targetName', 'tagrgetEmail', 'myName'],
+      tags: ['targetName', 'targetEmail', 'myName'],
       selectedTags: []
       // rawTags: [],
       // tagReg: null
@@ -204,11 +261,25 @@ export default {
     },
     insertTag: function (msg) {
       console.log(insertTag)
-      let target = document.getElementById('div_f')
-      target.focus()
-      insertTag.insertHtmlAtCurrent(`@#${msg}#@`)
-      this.messageF = target.innerText
-      this.scanTags()
+      // let target = document.getElementById('div_f')
+      let lastFocusId = window.sessionStorage.getItem('lastFocusId')
+      console.log('lastFocusId', lastFocusId)
+      if (lastFocusId !== 'div_f') {
+        let target = document.getElementById(lastFocusId)
+        target.focus()
+        insertTag.insertHtmlAtCurrent(`@#${msg}#@`)
+      } else {
+        lastFocusId = 'div_f'
+        let target = document.getElementById(lastFocusId)
+        target.focus()
+        insertTag.insertHtmlAtCurrent(`@#${msg}#@`)
+        this.messageF = target.innerText
+        this.scanTags()
+      }
+    },
+    setLastFocusId: function (e) {
+      console.log('setLastFocusId', e.target.id)
+      window.sessionStorage.setItem('lastFocusId', e.target.id)
     },
     addTag: function (e) {
       this.tags.push(e.target.value)
@@ -285,7 +356,7 @@ export default {
     min-width: 250px;
     /*max-width: 350px;*/
     padding-left: 4.5px;
-    height: 325px;
+    height: 395px;
   }
   div.tags, div.workspace{
     overflow-x: hidden; /* Hide horizontal scrollbar */
@@ -300,7 +371,7 @@ export default {
     padding-left: 3px;
     min-width:120px;
     max-width:20vw;
-    height: 325px;
+    height: 395px;
   }
   div.tags{
     border: 0.5px solid red;
@@ -396,4 +467,15 @@ export default {
     float: right;
   }
 
+  div.adress table td span[contentEditable="true"]{
+    border-bottom: 0.5px solid #555;
+    float: left;
+    /*padding-bottom: -1.5px;*/
+  }
+  div.adress table td.address_label{
+    width: 40px;
+  }
+  div.adress table td>span{
+    font-weight: bold;
+  }
 </style>
