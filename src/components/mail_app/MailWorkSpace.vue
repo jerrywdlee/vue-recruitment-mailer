@@ -122,13 +122,14 @@
 
       </div>
     </div>
-
+    <MailRender :mail-tags="tags" :mail-template="messageF" :mail-reg="setReg"></MailRender>
   </div>
+
 </template>
 
 <script>
 import insertTag from './insertTag.js'
-
+import MailRender from './MailRender'
 export default {
   name: 'MailWorkSpace',
   data () {
@@ -140,6 +141,12 @@ export default {
       // rawTags: [],
       // tagReg: null
     }
+  },
+  components: {
+    // Hello,
+    // World,
+    // MailApp
+    MailRender
   },
   computed: {
     // a computed getter
@@ -291,12 +298,15 @@ export default {
       if (selectedTagArry === []) {
         window.alert('Plz Select At Least 1 Tag.')
       } else {
-        this.tags = this.tags.filter(function (x, i, self) {
-          return selectedTagArry.indexOf(x) === -1
-        })
-        this.selectedTags = []
-        console.log(this.selectedTags)
-        console.log(this.tags)
+        let conf = window.confirm('Delete Selected Tags?\n' + `[ ${selectedTagArry.join(', ')} ]`)
+        if (conf) {
+          this.tags = this.tags.filter(function (x, i, self) {
+            return selectedTagArry.indexOf(x) === -1
+          })
+          this.selectedTags = []
+          console.log(this.selectedTags)
+          console.log(this.tags)
+        }
       }
     }
   },
@@ -354,7 +364,7 @@ export default {
     border: 1px solid green;
     width: 70vw;
     min-width: 250px;
-    /*max-width: 350px;*/
+    max-width: 600px;
     padding-left: 4.5px;
     height: 395px;
   }
@@ -369,7 +379,7 @@ export default {
     margin-left: -10px;
     margin-right: 10px;
     padding-left: 3px;
-    min-width:120px;
+    min-width:180px;
     max-width:20vw;
     height: 395px;
   }
@@ -396,6 +406,7 @@ export default {
     -webkit-border-radius: 8px 0 0 8px;
     border-radius:         8px 0 0 8px;
     padding-left: 5px;
+    width: 50%;
   }
   .tagTableRow>td:last-child{
     -moz-border-radius:    0 8px 8px 0;
@@ -414,7 +425,7 @@ export default {
     width:100%;
     min-width:250px;
     max-width:none;
-    height: 63%;
+    height: 58%;
     border: 0.5px solid Cyan;
     padding: 0px;
     text-align:center;
@@ -424,7 +435,7 @@ export default {
   div.front,div.back{
     text-align: left;
     width: 99%;
-    height: inherit;
+    height: 95%;
     /*border: 2px solid #ccc;*/
     padding: 5px;
     top:0px;
@@ -467,9 +478,19 @@ export default {
     float: right;
   }
 
+  div.adress{
+    width:90%;
+    min-width:250px;
+    max-width:none;
+  }
   div.adress table td span[contentEditable="true"]{
-    border-bottom: 0.5px solid #555;
+    border-bottom: 0.5px solid #aaa;
     float: left;
+    width: 40vw;
+    max-width: 420px;
+    min-width:150px;
+    text-align: left;
+    padding-left: 3px;
     /*padding-bottom: -1.5px;*/
   }
   div.adress table td.address_label{
