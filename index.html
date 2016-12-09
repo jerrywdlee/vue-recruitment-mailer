@@ -9,39 +9,5 @@
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-
-    <!-- Modal component -->
-    <div id="modal" class="uk-modal uk-close" style="display: block; ">
-      <div class="uk-modal-dialog">
-        <button type="button" class="uk-modal-close uk-close" onclick="closeModal()"></button>
-        <div class="uk-modal-header">
-          <h2></h2>
-        </div>
-        <div class="my-modal-body"></div>
-        <div class="uk-modal-footer uk-text-right">
-          <button type="button" class="uk-button">Cancel</button>
-          <button type="button" class="uk-button uk-button-primary">Save</button>
-        </div>
-      </div>
-      <script type="text/javascript">
-        function closeModal () {
-          document.getElementById('modal').className = 'uk-modal uk-close'
-          document.querySelector('.uk-modal-header').innerHTML = ''
-          document.querySelector('.my-modal-body').innerHTML = ''
-          document.querySelector('.uk-modal-footer').innerHTML = ''
-          return false
-        }
-        function openModal (header, body, footer) {
-          document.querySelector('.uk-modal-header').innerHTML = header || ''
-          document.querySelector('.my-modal-body').innerHTML = body || ''
-          document.querySelector('.uk-modal-footer').innerHTML = footer || ''
-          document.getElementById('modal').className = 'uk-modal uk-open'
-          return false
-        }
-        // closeModal()
-        // openModal()
-      </script>
-    </div>
-    </script>
   </body>
 </html>

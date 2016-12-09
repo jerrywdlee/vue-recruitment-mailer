@@ -55,7 +55,7 @@
                 <span>To:</span>
               </td>
               <td>
-                <span id="to_address" contentEditable="true" @blur="setLastFocusId">
+                <span id="to_address" contentEditable="true" @blur="setLastFocusId" @keyup="setMailInfo">
                   aaa@example.com
                 </span>
               </td>
@@ -65,7 +65,7 @@
                 <span>CC:</span>
               </td>
               <td>
-                <span id="cc_address" contentEditable="true" @blur="setLastFocusId">
+                <span id="cc_address" contentEditable="true" @blur="setLastFocusId" @keyup="setMailInfo">
                   bbb@example.com
                 </span>
               </td>
@@ -100,7 +100,7 @@
                 <span>Sub:</span>
               </td>
               <td>
-                <span id="subject" contentEditable="true" @blur="setLastFocusId">
+                <span id="subject" contentEditable="true" @blur="setLastFocusId" @keyup="setMailInfo">
                   AAAAAA
                 </span>
               </td>
@@ -122,13 +122,15 @@
 
       </div>
     </div>
-    <MailRender :mail-tags="tags" :mail-template="messageF" :mail-reg="setReg"></MailRender>
+    <MailRender
+    :mail-tags="tags" :mail-template="messageF" :mail-reg="setReg" :mail-subjct-raw="mailSubjctRaw"
+    :to-address-raw="toAddressRaw" :cc-address-raw="ccAddressRaw" :bcc-address-raw="bccAddressRaw"></MailRender>
   </div>
 
 </template>
 
 <script>
-import insertTag from './insertTag.js'
+import insertTag from './helpers/insertTag.js'
 import MailRender from './MailRender'
 export default {
   name: 'MailWorkSpace',
@@ -137,7 +139,11 @@ export default {
       messageF: 'Plz \n Type \n Sth.',
       messageB: '',
       tags: ['targetName', 'targetEmail', 'myName'],
-      selectedTags: []
+      selectedTags: [],
+      toAddressRaw: '',
+      ccAddressRaw: '',
+      bccAddressRaw: '',
+      mailSubjctRaw: ''
       // rawTags: [],
       // tagReg: null
     }
@@ -308,6 +314,22 @@ export default {
           console.log(this.tags)
         }
       }
+    },
+    setMailInfo: function (e) {
+      switch (e.target.id) {
+        case 'to_address':
+          this.toAddressRaw = e.target.innerText
+          break
+        case 'cc_address':
+          this.ccAddressRaw = e.target.innerText
+          break
+        case 'subject':
+          this.mailSubjctRaw = e.target.innerText
+          break
+        default:
+          return false
+      }
+      console.log(e.target.id, this.toAddressRaw)
     }
   },
   watch: {
