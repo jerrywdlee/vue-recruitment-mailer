@@ -1,19 +1,52 @@
 <template>
-  <div class="parient">
-    <div id="div_f" class="editable front" contentEditable="true" @keyup="setMessage"></div>
-    <div id="div_b" class="editable back" v-html="backMessage"></div>
+  <div class="MailApp">
+    <MailWorkSpace v-on:openModal="openModal"></MailWorkSpace>
   </div>
 </template>
 
 <script>
+  import MailWorkSpace from './mail_app/MailWorkSpace'
+
+  export default {
+    name: 'MailApp',
+    data () {
+      return {
+        messageF: 'Plz \n Type \n Sth.'
+      }
+    },
+    components: {
+      // Hello,
+      // World,
+      // MailApp
+      MailWorkSpace
+    },
+    computed: {
+      backMessage: function () {
+        // console.log('MailWorkSpace.backMessage')
+        // console.log(MailWorkSpace.backMessage)
+        // return MailWorkSpace.backMessage
+      }
+    },
+    methods: {
+      openModal: function (val, e) {
+        console.log(val)
+        console.log(e)
+      }
+    }
+  }
+</script>
+<!--
+<script>
+import MailWorkSpace from './components/mail_app/MailWorkSpace'
+
 export default {
   name: 'MailApp',
   data () {
     return {
       messageF: 'Plz \n Type \n Sth.',
-      messageB: '',
-      rawTags: [],
-      tagReg: null
+      messageB: ''
+      // rawTags: [],
+      // tagReg: null
     }
   },
   computed: {
@@ -48,11 +81,12 @@ export default {
 
       return this.messageB
     },
-    setRowTags: function () {
-      this.rawTags = this.messageF.match(/@#(?:.*?)#@/g) || []
+    rawTags: function () {
+      // this.rawTags = this.messageF.match(/@#(?:.*?)#@/g)
+      return this.messageF.match(/@#(?:.*?)#@/g)
     },
     setReg: function () {
-      if (this.rawTags[0]) {
+      if (this.rawTags) {
         // this.tagReg = new RegExp('(' + this.rawTags.join('|') + ')', 'g')
         return (new RegExp('(' + this.rawTags.join('|') + ')', 'g'))
       } else {
@@ -66,8 +100,8 @@ export default {
       // this.messageF = e.target.innerHTML // like `<div>aaa</div>`
       // this.messageF = e.target.textContent // this is text without newlines
       this.messageF = e.target.innerText
-      let tmpTags = this.messageF.match(/@#(?:.*?)#@/g)
-      this.rawTags = tmpTags || []
+      // let tmpTags = this.messageF.match(/@#(?:.*?)#@/g)
+      // this.rawTags = tmpTags || []
       // this.tagReg = new RegExp('(' + this.rawTags.join('|') + ')', 'g')
       // this.canRowTags()
     },
@@ -77,15 +111,20 @@ export default {
         str.match(/@#(?:.*?)#@/g)
         ["@#1234@#aaa#@", "@#aaa#@", "@#bbb#@"]
       */
-      this.rawTags = this.messageF.match(/@#(?:.*?)#@/g)
+      // this.rawTags = this.messageF.match(/@#(?:.*?)#@/g)
     }
   }
 }
 
 </script>
+-->
+<!--
 <style media="screen">
   span.tagSpan{
-    background: lavender;
+    /* background: lavender; */
+    /* background: MistyRose; */
+    background: #ffd1cc;
+    border: 0px solid #ffd1cc;
     position: relative;
     -moz-border-radius:    5px;
     -webkit-border-radius: 5px;
@@ -136,21 +175,8 @@ export default {
     position:absolute;
     /*margin-left:-40%;*/
     z-index:-1;
-    color: rgba(0,0,0,0.2);
+    color: rgba(0,0,0,0.25);
   }
 
-  .red{
-    background: red;
-    position: relative;
-    -moz-border-radius:    5px;
-    -webkit-border-radius: 5px;
-    border-radius:         5px;
-    /*padding: 1.5px;*/
-    /*
-    margin-left: 3px;
-    left : -3px;
-    margin-right: 3px;
-    right:-3px;
-    */
-  }
 </style>
+-->

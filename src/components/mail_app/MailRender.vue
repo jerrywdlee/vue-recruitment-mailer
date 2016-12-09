@@ -1,0 +1,180 @@
+<template>
+  <div class="mailRender">
+    <!--
+    <h1>{{ msg }}</h1>
+  -->
+    <div class="tagInputSpace">
+      <table style="border-collapse: collapse;">
+        <tr v-for="tag in mailTags" class="tagTableRow">
+          <td class="tagLabel">
+            <span class="tagLabel">
+            {{ tag }}
+            </span>
+          </td>
+          <td class="tagContent">
+            <input type="text" :id="'set_vmail_tag_'+tag" @keyup="setInfoTag">
+            <!--
+            <input type="text" :value="tag" v-model="selectedTags">
+          -->
+          </td>
+          <!--
+          <td style="padding-top:3.6px;padding-left:6px;">
+            <a href="javascript:void(0);" class="uk-icon-hover uk-icon-edit" ></a>
+          </td>
+          <td style="padding-top:2.5px;padding-left:6px;">
+            <a href="javascript:void(0);" class="uk-icon-hover uk-icon-sign-in" ></a>
+          </td>
+        -->
+        </tr>
+      </table>
+    </div>
+    <p>
+      {{ mailTags }}
+    </p>
+    <p>
+      {{ mailTemplate }}
+    </p>
+    <p>
+      {{ mailReg ? mailReg.toString() : 'Null' }}
+    </p>
+    <div class="toolBar">
+      <button class="uk-button uk-button-primary"
+      @click="renderMail('mailto', $event)">
+        <i class="uk-icon-justify uk-icon-envelope"></i>
+        <span class="vmail_label"> Create!</span>
+      </button>
+    </div>
+
+    <!-- Modal component -->
+    <div id="modal" class="uk-modal uk-close" :style="{display: modalDisplay} ">
+      <div class="uk-modal-dialog">
+        <button type="button" class="uk-modal-close uk-close" @click="closeModal"></button>
+        <div class="uk-modal-header"></div>
+        <div class="my-modal-body"></div>
+        <div class="uk-modal-footer uk-text-right">
+          <button type="button" class="uk-button" @click="closeModal">Cancel</button>
+          <!--
+          <a class="uk-button uk-button-success" :href="modalButtonHref">Send!</a>
+        -->
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import renderTags from './helpers/renderTags.js'
+  import modalHelper from './helpers/modalHelper.js'
+
+  export default {
+    name: 'mailRender',
+    props: ['mailTags', 'mailTemplate', 'mailReg',
+      'toAddressRaw', 'ccAddressRaw', 'bccAddressRaw', 'mailSubjctRaw'],
+    data () {
+      return {
+        // msg: 'Welcome to Your Vue.js App',
+        infoTagObj: {},
+        modalDisplay: 'none',
+        toAddress: '',
+        ccAddress: '',
+        bccAddress: '',
+        mailSubjct: '',
+        mailText: ''
+      }
+    },
+    computed: {
+      modalButtonHref: function () {
+        let urlStr = 'mailto:'
+        urlStr += (this.toAddress + '?')
+        urlStr += ('cc=' + this.ccAddress + '&')
+        // urlStr += ('bcc='+$('input[name=bcc]').val()+'&');
+        urlStr += ('subject=' + encodeURI(this.mailSubjct) + '&')
+        var bodyStr = (this.mailText).replace(/\r\n|\r|\n/g, '%0d%0a')
+        urlStr += ('body=' + bodyStr)
+        console.log(urlStr)
+        return urlStr
+      }
+    },
+    methods: {
+      setInfoTag: function (e) {
+        // console.log(e.target.id, e.target.value)
+        let tagName = e.target.id.replace('set_vmail_tag_', '')
+        let tagVal = e.target.value
+        // console.log(tagName, tagVal)
+        this.infoTagObj[tagName] = tagVal
+        console.log(this.infoTagObj)
+      },
+      renderMail: function (sendMethod, e) {
+        console.log(this.toAddressRaw)
+        switch (sendMethod) {
+          case 'gmail':
+            console.log('gmail')
+            break
+          case 'mailto':
+          default:
+            this.mailText = renderTags.renderTags(this.mailReg, this.mailTemplate, this.infoTagObj)
+            this.mailSubjct = renderTags.renderTags(this.mailReg, this.mailSubjctRaw, this.infoTagObj)
+            this.toAddress = renderTags.renderTags(this.mailReg, this.toAddressRaw, this.infoTagObj)
+            this.ccAddress = renderTags.renderTags(this.mailReg, this.ccAddressRaw, this.infoTagObj)
+            this.bccAddress = renderTags.renderTags(this.mailReg, this.bccAddressRaw, this.infoTagObj)
+
+            // let footerBtn = this.
+            modalHelper.openModal('Mail To: ' + this.toAddress, this.mailText)
+            this.modalDisplay = 'block'
+            console.log('mailto', this.mailText, this.toAddressRaw)
+        }
+      },
+      closeModal: function (e) {
+        modalHelper.closeModal().then(
+          this.modalDisplay = 'none'
+        )
+      }
+    }
+  }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+  div.tagInputSpace div{
+    border-radius:5px;
+    float:left;
+    padding:10px;
+    /*position:relative;*/
+  }
+  div.mailRender{
+    position: relative;
+    height: 395px;
+    border: 1px solid orange;
+    margin-left: 10px;
+  }
+  a {
+    /* color: #42b983; */
+  }
+
+  div.toolBar{
+    border-radius:0 0 5px 5px;
+    padding: 0;
+    background: #ecf0f5;
+    height: 40px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  div.toolBar button{
+    margin-top: 5px;
+    margin-right: 10px;
+    float: right;
+  }
+  td.tagLabel{
+    text-align: left;
+  }
+  span.tagLabel{
+    /*font-weight: bold;*/
+  }
+  td.tagContent input{
+    border-radius:3px;
+    border: 1px solid #ccc;
+  }
+</style>
