@@ -22,6 +22,7 @@ export default {
     if (footer) {
       document.querySelector('.uk-modal-footer').innerHTML = footer
     }
+
     document.getElementById('modal').className = 'uk-modal uk-open'
     // return false
   }

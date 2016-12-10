@@ -49,14 +49,16 @@
     <div class="workspace_wrap">
       <div class="adress" style="padding:0;padding-bottom:2px;">
         <div style="width:inherit;border: 0.5px solid #ffd1cc;float:none;">
-          <table>
+          <table width="98%">
             <tr>
               <td class="address_label">
                 <span>To:</span>
               </td>
-              <td>
-                <span id="to_address" contentEditable="true" @blur="setLastFocusId" @keyup="setMailInfo">
-                  aaa@example.com
+              <td class="input_emails">
+                <span v-for="mail in toAddressAry" class="emails">{{ mail }}
+                  <i class="uk-icon-hover uk-icon-times" @click="delEmail(mail, 'to', $event)"></i></span>
+                <span id="to_address" class="single-line" contentEditable="true" @focus="setLastFocusId" @keydown.enter.stop="addEmail(null, 'to', $event)">
+                  <!-- <span @blur="setLastFocusId"></span> -->
                 </span>
               </td>
             </tr>
@@ -64,9 +66,11 @@
               <td class="address_label">
                 <span>CC:</span>
               </td>
-              <td>
-                <span id="cc_address" contentEditable="true" @blur="setLastFocusId" @keyup="setMailInfo">
-                  bbb@example.com
+              <td class="input_emails">
+                <span v-for="mail in ccAddressAry" class="emails">{{ mail }}
+                  <i class="uk-icon-hover uk-icon-times" @click="delEmail(mail, 'to', $event)"></i></span>
+                <span id="cc_address" class="single-line" contentEditable="true" @focus="setLastFocusId" @keydown.enter.stop="addEmail(null, 'cc', $event)">
+                  <!-- <span @blur="setLastFocusId"></span> -->
                 </span>
               </td>
             </tr>
@@ -93,15 +97,15 @@
           </span>
         </div>
       -->
-        <div style="width:inherit;border: 0.5px solid #ffd1cc;margin-top:2px;">
-          <table>
+        <div style="width:inherit;border: 0.5px solid #ffd1cc;margin-top:2px;" >
+          <table width="98%">
             <tr>
               <td class="address_label">
                 <span>Sub:</span>
               </td>
-              <td>
-                <span id="subject" contentEditable="true" @blur="setLastFocusId" @keyup="setMailInfo">
-                  AAAAAA
+              <td class="input_emails">
+                <span id="subject" contentEditable="true" @focus="setLastFocusId" @keyup="setMessage">
+                  <!-- <span @blur="setLastFocusId"></span> -->
                 </span>
               </td>
             </tr>
@@ -124,7 +128,7 @@
     </div>
     <MailRender
     :mail-tags="tags" :mail-template="messageF" :mail-reg="setReg" :mail-subjct-raw="mailSubjctRaw"
-    :to-address-raw="toAddressRaw" :cc-address-raw="ccAddressRaw" :bcc-address-raw="bccAddressRaw"></MailRender>
+    :to-address-ary="toAddressAry" :cc-address-ary="ccAddressAry" :bcc-address-ary="bccAddressAry"></MailRender>
   </div>
 
 </template>
@@ -140,9 +144,12 @@ export default {
       messageB: '',
       tags: ['targetName', 'targetEmail', 'myName'],
       selectedTags: [],
-      toAddressRaw: '',
-      ccAddressRaw: '',
-      bccAddressRaw: '',
+      toAddressAry: ['aaa@sample.com', 'bbb@sample.com'],
+      ccAddressAry: ['ccc@sample.com', 'ddd@sample.cn'],
+      bccAddressAry: ['eee@sample.com', 'fff@sample.cn'],
+      // toAddressRaw: '',
+      // ccAddressRaw: '',
+      // bccAddressRaw: '',
       mailSubjctRaw: ''
       // rawTags: [],
       // tagReg: null
@@ -205,7 +212,12 @@ export default {
       console.log(e.target.innerText)
       // this.messageF = e.target.innerHTML // like `<div>aaa</div>`
       // this.messageF = e.target.textContent // this is text without newlines
-      this.messageF = e.target.innerText
+      if (e.target.id === 'div_f') { // mail text
+        this.messageF = e.target.innerText
+      } else if (e.target.id === 'subject') {
+        this.mailSubjctRaw = e.target.innerText
+        // console.log(this.mailSubjctRaw)
+      }
       this.scanTags()
       // let tmpTags = this.messageF.match(/@#(?:.*?)#@/g)
       // this.rawTags = tmpTags || []
@@ -281,6 +293,18 @@ export default {
         let target = document.getElementById(lastFocusId)
         target.focus()
         insertTag.insertHtmlAtCurrent(`@#${msg}#@`)
+        let email = document.getElementById(lastFocusId).innerText.trim()
+        switch (lastFocusId.toLowerCase()) {
+          case 'to_address':
+            // this.
+            this.addEmail(email, 'to')
+            break
+          case 'cc_address':
+            this.addEmail(email, 'cc')
+            break
+          default:
+
+        }
       } else {
         lastFocusId = 'div_f'
         let target = document.getElementById(lastFocusId)
@@ -330,6 +354,42 @@ export default {
           return false
       }
       console.log(e.target.id, this.toAddressRaw)
+    },
+    addEmail: function (email, position, e) {
+      if (!email) {
+        email = e.target.innerText.trim()
+      }
+      let targetId = window.sessionStorage.getItem('lastFocusId')
+      let mailReg = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+      console.log(email, position)
+      if (email.match(mailReg) || email.match(/@#(?:.*?)#@/)) {
+        switch (position.toLowerCase()) {
+          case 'to':
+            this.toAddressAry.push(email)
+            // e.target.textContent = ''
+            document.getElementById(targetId).innerText = ''
+            break
+          case 'cc':
+            this.ccAddressAry.push(email)
+            document.getElementById(targetId).innerText = ''
+            break
+          default:
+
+        }
+      }
+    },
+    delEmail: function (email, position, e) {
+      console.log(position, email)
+      switch (position.toLowerCase()) {
+        case 'to':
+          this.toAddressAry.splice(this.toAddressAry.indexOf(email), 1)
+          break
+        case 'cc':
+          this.ccAddressAry.splice(this.ccAddressAry.indexOf(email), 1)
+          break
+        default:
+
+      }
     }
   },
   watch: {
@@ -369,6 +429,19 @@ export default {
     -webkit-border-radius: 5px;
     border-radius:         5px;
   }
+  [contenteditable="true"].single-line {
+    white-space: nowrap;
+    width:200px;
+    overflow: hidden;
+    height: auto;
+  }
+  [contenteditable="true"].single-line br {
+    display:none;
+  }
+  [contenteditable="true"].single-line * {
+    display:inline;
+    white-space:nowrap;
+  }
 </style>
 
 <style scoped>
@@ -388,7 +461,7 @@ export default {
     min-width: 250px;
     max-width: 600px;
     padding-left: 4.5px;
-    height: 395px;
+    height: 455px;
   }
   div.tags, div.workspace{
     overflow-x: hidden; /* Hide horizontal scrollbar */
@@ -403,7 +476,7 @@ export default {
     padding-left: 3px;
     min-width:180px;
     max-width:20vw;
-    height: 395px;
+    height: 455px;
   }
   div.tags{
     border: 0.5px solid red;
@@ -460,6 +533,7 @@ export default {
     height: 95%;
     /*border: 2px solid #ccc;*/
     padding: 5px;
+    padding-left: 8px;
     top:0px;
     left:50%;
     margin-right: -50%;
@@ -471,6 +545,9 @@ export default {
   div.front{
     position:relative;
     z-index:10;
+  }
+  div#div_f:focus{
+    outline: 0;
   }
   div.front:focus{
     /*background: yellow;*/
@@ -501,24 +578,52 @@ export default {
   }
 
   div.adress{
-    width:90%;
+    width:98%;
     min-width:250px;
     max-width:none;
-  }
-  div.adress table td span[contentEditable="true"]{
-    border-bottom: 0.5px solid #aaa;
-    float: left;
-    width: 40vw;
-    max-width: 420px;
-    min-width:150px;
-    text-align: left;
-    padding-left: 3px;
-    /*padding-bottom: -1.5px;*/
-  }
-  div.adress table td.address_label{
-    width: 40px;
   }
   div.adress table td>span{
     font-weight: bold;
   }
+  div.adress table td span[contentEditable="true"],.emails{
+    /* border-bottom: 0.5px solid #aaa; */
+    float: left;
+    /* width: 40vw; */
+    width: auto;
+    text-align: left;
+    padding-left: 3px;
+    /*padding-bottom: -1.5px;*/
+  }
+  div.adress table td span[contentEditable="true"]{
+    max-width: 420px;
+    min-width:150px;
+  }
+  div.adress table td.input_emails{
+    border-bottom: 0.5px solid #aaa;
+    width: calc(100% - 40px);
+  }
+  span.emails{
+    display: inline-block;
+    border-radius: 5px;
+    border: none;
+    padding-right: 3px;
+    margin-right: 2px;
+    margin-top: 2px;
+    background: MistyRose;
+  }
+  span[contenteditable="true"].single-line{
+    margin-left: 5px;
+    border: 0.5px solid MistyRose;
+    border-radius: 5px;
+    margin-top: 2px;
+  }
+  span#subject{
+    max-width: 100%;
+    width: 99%;
+  }
+
+  div.adress table td.address_label{
+    width: 40px;
+  }
+
 </style>

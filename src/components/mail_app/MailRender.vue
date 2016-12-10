@@ -37,6 +37,7 @@
     <p>
       {{ mailReg ? mailReg.toString() : 'Null' }}
     </p>
+    <p>{{ mailSubjctRaw }}</p>
     <div class="toolBar">
       <button class="uk-button uk-button-primary"
       @click="renderMail('mailto', $event)">
@@ -46,14 +47,15 @@
     </div>
 
     <!-- Modal component -->
-    <div id="modal" class="uk-modal uk-close" :style="{display: modalDisplay} ">
+    <div id="modal" class="uk-modal uk-close" :style="{display: modalDisplay}" @click.self="closeModal">
       <div class="uk-modal-dialog">
         <button type="button" class="uk-modal-close uk-close" @click="closeModal"></button>
         <div class="uk-modal-header"></div>
         <div class="my-modal-body"></div>
         <div class="uk-modal-footer uk-text-right">
-          <button type="button" class="uk-button" @click="closeModal">Cancel</button>
           <!--
+          <button type="button" class="uk-button" @click="closeModal">Cancel</button>
+
           <a class="uk-button uk-button-success" :href="modalButtonHref">Send!</a>
         -->
         </div>
@@ -69,15 +71,15 @@
   export default {
     name: 'mailRender',
     props: ['mailTags', 'mailTemplate', 'mailReg',
-      'toAddressRaw', 'ccAddressRaw', 'bccAddressRaw', 'mailSubjctRaw'],
+      'toAddressAry', 'ccAddressAry', 'bccAddressAry', 'mailSubjctRaw'],
     data () {
       return {
         // msg: 'Welcome to Your Vue.js App',
         infoTagObj: {},
         modalDisplay: 'none',
-        toAddress: '',
-        ccAddress: '',
-        bccAddress: '',
+        toAddress: [],
+        ccAddress: [],
+        bccAddress: [],
         mailSubjct: '',
         mailText: ''
       }
@@ -114,14 +116,26 @@
           default:
             this.mailText = renderTags.renderTags(this.mailReg, this.mailTemplate, this.infoTagObj)
             this.mailSubjct = renderTags.renderTags(this.mailReg, this.mailSubjctRaw, this.infoTagObj)
-            this.toAddress = renderTags.renderTags(this.mailReg, this.toAddressRaw, this.infoTagObj)
-            this.ccAddress = renderTags.renderTags(this.mailReg, this.ccAddressRaw, this.infoTagObj)
-            this.bccAddress = renderTags.renderTags(this.mailReg, this.bccAddressRaw, this.infoTagObj)
 
-            // let footerBtn = this.
-            modalHelper.openModal('Mail To: ' + this.toAddress, this.mailText)
+            this.toAddress = this.toAddressAry.map((x, i, self) => {
+              return renderTags.renderTags(this.mailReg, x, this.infoTagObj)
+            }) || []
+            this.ccAddress = this.ccAddressAry.map((x, i, self) => {
+              return renderTags.renderTags(this.mailReg, x, this.infoTagObj)
+            }) || []
+            this.bccAddress = this.bccAddressAry.map((x, i, self) => {
+              return renderTags.renderTags(this.mailReg, x, this.infoTagObj)
+            }) || []
+            // this.toAddress = renderTags.renderTags(this.mailReg, this.toAddressRaw, this.infoTagObj)
+            // this.ccAddress = renderTags.renderTags(this.mailReg, this.ccAddressRaw, this.infoTagObj)
+            // this.bccAddress = renderTags.renderTags(this.mailReg, this.bccAddressRaw, this.infoTagObj)
+
+            let footerBtn = ''
+            // footerBtn = `<button type="button" class="uk-button" @click="closeModal">Cancel</button>`
+            footerBtn += `<a class="uk-button uk-button-success" href="${this.modalButtonHref}">Send!</a>`
+            modalHelper.openModal('Mail To: ' + this.toAddress[0], this.mailText.replace(/\r|\n|\r\n/g, '<br>'), footerBtn)
             this.modalDisplay = 'block'
-            console.log('mailto', this.mailText, this.toAddressRaw)
+            console.log('mailto', this.mailText, this.mailSubjctRaw, this.mailSubjct)
         }
       },
       closeModal: function (e) {
