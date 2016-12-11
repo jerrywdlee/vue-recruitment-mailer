@@ -4,8 +4,8 @@
     </div>
     <div class="tagbar">
       <div class="tags">
-        <table style="border-collapse: collapse;">
-          <tr v-for="tag in tags" class="tagTableRow">
+        <table style="border-collapse: collapse;" width="98%">
+          <tr v-for="tag in tags" class="tagTableRow" :class="'vmail_'+tag">
             <td >
               <span class="tagLabel"
               @keydown.enter="renewTags(tag, $event)"
@@ -55,7 +55,8 @@
                 <span>To:</span>
               </td>
               <td class="input_emails">
-                <span v-for="mail in toAddressAry" class="emails">{{ mail }}
+                <span v-for="mail in toAddressAry" class="emails"
+                  :class="mail.match(/@#(?:.*?)#@/)?'vmail_'+mail.replace(/@#|#@/g, '') : ''">{{ mail }}
                   <i class="uk-icon-hover uk-icon-times" @click="delEmail(mail, 'to', $event)"></i></span>
                 <span id="to_address" class="single-line" contentEditable="true" @focus="setLastFocusId" @keydown.enter.stop="addEmail(null, 'to', $event)">
                   <!-- <span @blur="setLastFocusId"></span> -->
@@ -68,7 +69,7 @@
               </td>
               <td class="input_emails">
                 <span v-for="mail in ccAddressAry" class="emails">{{ mail }}
-                  <i class="uk-icon-hover uk-icon-times" @click="delEmail(mail, 'to', $event)"></i></span>
+                  <i class="uk-icon-hover uk-icon-times" @click="delEmail(mail, 'cc', $event)"></i></span>
                 <span id="cc_address" class="single-line" contentEditable="true" @focus="setLastFocusId" @keydown.enter.stop="addEmail(null, 'cc', $event)">
                   <!-- <span @blur="setLastFocusId"></span> -->
                 </span>
@@ -103,10 +104,11 @@
               <td class="address_label">
                 <span>Sub:</span>
               </td>
-              <td class="input_emails">
+              <td class="input_emails subject-warp">
                 <span id="subject" contentEditable="true" @focus="setLastFocusId" @keyup="setMessage">
                   <!-- <span @blur="setLastFocusId"></span> -->
                 </span>
+                <span id="subject-back" v-html="subjectBack"></span>
               </td>
             </tr>
           </table>
@@ -123,7 +125,9 @@
         <div id="div_b" class="editable back" v-html="backMessage"></div>
       </div>
       <div class="toolBar">
-
+        <select class="fixedPhrase" v-model="selectedMailTemp">
+          <option :value="index" v-for="(fixedPhrase, index) in fixedPhraseAry">{{ fixedPhrase.name }}</option>
+        </select>
       </div>
     </div>
     <MailRender
@@ -136,6 +140,8 @@
 <script>
 import insertTag from './helpers/insertTag.js'
 import MailRender from './MailRender'
+import fixedPhrase from '../../datas/fixed_phrase.json'
+
 export default {
   name: 'MailWorkSpace',
   data () {
@@ -144,13 +150,15 @@ export default {
       messageB: '',
       tags: ['targetName', 'targetEmail', 'myName'],
       selectedTags: [],
-      toAddressAry: ['aaa@sample.com', 'bbb@sample.com'],
-      ccAddressAry: ['ccc@sample.com', 'ddd@sample.cn'],
+      toAddressAry: ['aaa@sample.com'],
+      ccAddressAry: ['ccc@sample.com'],
       bccAddressAry: ['eee@sample.com', 'fff@sample.cn'],
       // toAddressRaw: '',
       // ccAddressRaw: '',
       // bccAddressRaw: '',
-      mailSubjctRaw: ''
+      mailSubjctRaw: '',
+      fixedPhraseAry: fixedPhrase,
+      selectedMailTemp: []
       // rawTags: [],
       // tagReg: null
     }
@@ -194,14 +202,50 @@ export default {
       // eventHub.$emit('backMessage',this.messageB)
       return this.messageB
     },
+    subjectBack: function () {
+      let tmpReg = this.setReg
+      let subjectBackMsg = ''
+      if (tmpReg) {
+        subjectBackMsg = this.mailSubjctRaw
+                        // .replace(/\r|\n|\r\n/g, '<br>')
+                        .replace(tmpReg, (match) => {
+                          let tagName = match.replace(/@#|#@/g, '')
+                          return `<span class='tagSpan vmail_${tagName}'>${match}</span>`
+                        }).replace(/\r|\n|\r\n/g, '<br>')
+      } else {
+        subjectBackMsg = this.mailSubjctRaw.replace(/\r|\n|\r\n/g, '<br>')
+      }
+      return subjectBackMsg
+    },
     rawTags: function () {
       // this.rawTags = this.messageF.match(/@#(?:.*?)#@/g)
-      return this.messageF.match(/@#(?:.*?)#@/g)
+      let tmpMessageTags = this.messageF.match(/@#(?:.*?)#@/g) || []
+      let tmpSubjectTags = this.mailSubjctRaw.match(/@#(?:.*?)#@/g) || []
+      let tmpMailTags = this.toAddressAry.filter((x, i, self) => {
+        return x.match(/@#(?:.*?)#@/g)
+      })
+      tmpMailTags = tmpMailTags.concat(this.ccAddressAry.filter((x, i, self) => {
+        return x.match(/@#(?:.*?)#@/g)
+      }))
+      // this.ccAddressAry.join(',') + this.bccAddressAry.join(',')
+      // .match(/@#(?:.*?)#@/g) || []
+      console.log(tmpMailTags)
+      let tmpRawTags = tmpMessageTags.concat(tmpSubjectTags).concat(tmpMailTags)
+      if (tmpRawTags[0]) {
+        return tmpRawTags
+      } else {
+        return null
+      }
+      // return this.messageF.match(/@#(?:.*?)#@/g)
     },
     setReg: function () {
-      if (this.rawTags) {
+      if (this.tags[0]) {
         // this.tagReg = new RegExp('(' + this.rawTags.join('|') + ')', 'g')
-        return (new RegExp('(' + this.rawTags.join('|') + ')', 'g'))
+        let tmpTagArry = this.tags.map((x, i, self) => {
+          return `@#${x}#@`
+        })
+        // return (new RegExp('(' + this.rawTags.join('|') + ')', 'g'))
+        return (new RegExp('(' + tmpTagArry.join('|') + ')', 'g'))
       } else {
         return null
       }
@@ -270,6 +314,24 @@ export default {
           this.messageF = this.messageF.replace(tmpReg, `@#${newTagLabel}#@`)
           let oldHtml = document.getElementById('div_f').innerHTML
           document.getElementById('div_f').innerHTML = oldHtml.replace(tmpReg, `@#${newTagLabel}#@`)
+          // for subject
+          this.mailSubjctRaw = this.mailSubjctRaw.replace(tmpReg, `@#${newTagLabel}#@`)
+          let oldSub = document.getElementById('subject').innerHTML
+          document.getElementById('subject').innerHTML = oldSub.replace(tmpReg, `@#${newTagLabel}#@`)
+          this.toAddressAry = this.toAddressAry.map((x, i, self) => {
+            if (x.match(tmpReg)) {
+              return `@#${newTagLabel}#@`
+            } else {
+              return x
+            }
+          })
+          this.ccAddressAry = this.ccAddressAry.map((x, i, self) => {
+            if (x.match(tmpReg)) {
+              return `@#${newTagLabel}#@`
+            } else {
+              return x
+            }
+          })
           this.scanTags()
           console.log(this.tags)
         } else {
@@ -302,6 +364,9 @@ export default {
           case 'cc_address':
             this.addEmail(email, 'cc')
             break
+          case 'subject':
+            this.mailSubjctRaw = email
+            break
           default:
 
         }
@@ -330,6 +395,36 @@ export default {
       } else {
         let conf = window.confirm('Delete Selected Tags?\n' + `[ ${selectedTagArry.join(', ')} ]`)
         if (conf) {
+          let tmpTagArry = selectedTagArry.map((x, i, self) => {
+            return `@#${x}#@`
+          })
+          let tmpReg = new RegExp('(' + tmpTagArry.join('|') + ')', 'g')
+          // reset messageF
+          let oldHtml = document.getElementById('div_f').innerHTML
+          document.getElementById('div_f').innerHTML = oldHtml.replace(tmpReg, ``)
+          this.messageF = document.getElementById('div_f').innerText
+          // for subject
+          // this.mailSubjctRaw = this.mailSubjctRaw.replace(tmpReg, ``)
+          let oldSub = document.getElementById('subject').innerHTML
+          document.getElementById('subject').innerHTML = oldSub.replace(tmpReg, ``)
+          this.mailSubjctRaw = document.getElementById('subject').innerText
+          // to cc
+          this.toAddressAry = this.toAddressAry.filter((x, i, self) => {
+            if (x.match(tmpReg)) {
+              return false
+            } else {
+              return x
+            }
+          })
+          this.ccAddressAry = this.ccAddressAry.filter((x, i, self) => {
+            if (x.match(tmpReg)) {
+              return false
+            } else {
+              return x
+            }
+          })
+          this.scanTags()
+
           this.tags = this.tags.filter(function (x, i, self) {
             return selectedTagArry.indexOf(x) === -1
           })
@@ -376,6 +471,7 @@ export default {
           default:
 
         }
+        this.scanTags()
       }
     },
     delEmail: function (email, position, e) {
@@ -406,6 +502,19 @@ export default {
         document.querySelector('.selectedTagStyles')
         .innerHTML = ``
       }
+    },
+    selectedMailTemp: function (val) {
+      console.log(this.fixedPhraseAry[val].to)
+      this.tags = []
+      let tmpMailObj = this.fixedPhraseAry[val]
+      this.toAddressAry = tmpMailObj['to'] || []
+      this.ccAddressAry = tmpMailObj['cc'] || []
+      this.bccAddressAry = tmpMailObj['bcc'] || []
+      document.getElementById('subject').innerText = tmpMailObj['subject']
+      this.mailSubjctRaw = document.getElementById('subject').innerText
+      document.getElementById('div_f').innerText = tmpMailObj['mailText']
+      this.messageF = document.getElementById('div_f').innerText
+      this.scanTags()
     }
   }
 }
@@ -457,9 +566,9 @@ export default {
   div.workspace_wrap{
     position: relative;
     border: 1px solid green;
-    width: 70vw;
+    width: calc(80% - 350px);
     min-width: 250px;
-    max-width: 600px;
+    /*max-width: 600px;*/
     padding-left: 4.5px;
     height: 455px;
   }
@@ -474,6 +583,7 @@ export default {
     margin-left: -10px;
     margin-right: 10px;
     padding-left: 3px;
+    width: 15%;
     min-width:180px;
     max-width:20vw;
     height: 455px;
@@ -482,9 +592,10 @@ export default {
     border: 0.5px solid red;
     width: 95%;
     padding:5px;
-    padding-left: 3px;
+    padding-left: 5px;
     height: 87%;
     text-align: left;
+    overflow-x: scroll;
   }
   .tagTableRow{
     -moz-border-radius:    5px;
@@ -558,6 +669,18 @@ export default {
     /*margin-left:-40%;*/
     z-index:-1;
     color: rgba(0,0,0,0.25);
+    word-break: break-all;
+  }
+
+  select.fixedPhrase{
+    height: 30px;
+    margin-top: 5px;
+    margin-right: 10px;
+    float: right;
+    width: 40%;
+    min-width: 80px;
+    font-weight: bold;
+    color: #555;
   }
 
   div.toolBar{
@@ -609,7 +732,8 @@ export default {
     padding-right: 3px;
     margin-right: 2px;
     margin-top: 2px;
-    background: MistyRose;
+    /*background: MistyRose;*/
+    background: lavenderBlush;
   }
   span[contenteditable="true"].single-line{
     margin-left: 5px;
@@ -617,9 +741,25 @@ export default {
     border-radius: 5px;
     margin-top: 2px;
   }
+  td.subject-warp{
+    position:relative;
+  }
   span#subject{
+    position:relative;
+    z-index:10;
     max-width: 100%;
     width: 99%;
+  }
+  span#subject-back{
+    text-align: left;
+    position:absolute;
+    top: auto;
+    left: auto;
+    left: 3.8px;
+    /*margin-left:-80%;*/
+    z-index:-1;
+    color: rgba(0,0,0,0.25);
+    word-break: break-all;
   }
 
   div.adress table td.address_label{

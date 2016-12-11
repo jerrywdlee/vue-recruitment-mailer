@@ -5,14 +5,15 @@
   -->
     <div class="tagInputSpace">
       <table style="border-collapse: collapse;">
-        <tr v-for="tag in mailTags" class="tagTableRow">
+        <tr v-for="tag in mailTags" class="tagTableRow" :class="'vmail_'+tag">
           <td class="tagLabel">
             <span class="tagLabel">
             {{ tag }}
             </span>
           </td>
+          <td><span style="font-size:1.2em;font-weight:bolder;"> &nbsp;:&nbsp;</span></td>
           <td class="tagContent">
-            <input type="text" :id="'set_vmail_tag_'+tag" @keyup="setInfoTag">
+            <input type="text" :id="'set_vmail_tag_'+tag" @keyup="setInfoTag" >
             <!--
             <input type="text" :value="tag" v-model="selectedTags">
           -->
@@ -28,6 +29,7 @@
         </tr>
       </table>
     </div>
+    <!--
     <p>
       {{ mailTags }}
     </p>
@@ -38,6 +40,7 @@
       {{ mailReg ? mailReg.toString() : 'Null' }}
     </p>
     <p>{{ mailSubjctRaw }}</p>
+  -->
     <div class="toolBar">
       <button class="uk-button uk-button-primary"
       @click="renderMail('mailto', $event)">
@@ -157,14 +160,46 @@
   }
   div.mailRender{
     position: relative;
-    height: 395px;
+    height: 455px;
     border: 1px solid orange;
     margin-left: 10px;
+    width: auto;
+  }
+  div.tagInputSpace{
+    border-radius:5px;
+    padding: 5px;
+    border: 1px solid orange;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    height: 88%;
+    min-width: 200px;
   }
   a {
     /* color: #42b983; */
   }
-
+  .tagTableRow{
+    -moz-border-radius:    5px;
+    -webkit-border-radius: 5px;
+    border-radius:         5px;
+    background:       lavender;
+    padding-bottom: 1px;
+    border-bottom: 1px solid #FFF;
+    /* border: 0.5px solid red; */
+  }
+  .tagTableRow>td:first-child{
+    /* border: 0.5px solid red; */
+    -moz-border-radius:    8px 0 0 8px;
+    -webkit-border-radius: 8px 0 0 8px;
+    border-radius:         8px 0 0 8px;
+    padding-left: 5px;
+    /*width: 50%;*/
+  }
+  .tagTableRow>td:last-child{
+    -moz-border-radius:    0 8px 8px 0;
+    -webkit-border-radius: 0 8px 8px 0;
+    border-radius:         0 8px 8px 0;
+    padding-right: 5px;
+  }
   div.toolBar{
     border-radius:0 0 5px 5px;
     padding: 0;
@@ -181,6 +216,7 @@
     margin-right: 10px;
     float: right;
   }
+
   td.tagLabel{
     text-align: left;
   }
@@ -190,5 +226,13 @@
   td.tagContent input{
     border-radius:3px;
     border: 1px solid #ccc;
+    width: 95%;
+  }
+
+  div.my-modal-body{
+    /*padding: 10px;*/
+    text-align: left;
+    /*overflow-x: none;
+    overflow-y: scroll;*/
   }
 </style>
