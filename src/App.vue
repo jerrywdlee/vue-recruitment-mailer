@@ -5,7 +5,10 @@
 
     </div>
   -->
+    <!--
     <img src="./assets/logo.png">
+    -->
+    <img src="./assets/vue-mailer-logo-v01.svg" alt="vue-mailer-logo">
     <!--
     <hello></hello>
     <world></world>
