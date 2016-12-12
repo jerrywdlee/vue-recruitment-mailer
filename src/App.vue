@@ -6,6 +6,7 @@
           <img class="vmail-logo" src="./assets/vue-mailer-logo-v02.svg" alt="vue-mailer-logo">
         </a>
         <h1>Vue Recruit Mailer</h1>
+        <span class="uk-badge uk-badge-success vmail-version" style="">v0.0.16</span>
       </div>
     </nav>
     <!--
@@ -61,7 +62,15 @@ export default {
   }
   div.vmail-header h1{
     display: inline;
+    font-style: oblique;
     margin: 10px;
+    vertical-align: middle;
+    color: #41b883;
+  }
+  div.vmail-header .vmail-version{
+    font-size:0.9em;
+    padding-top: 3px;
+    padding-bottom: 2px;
     vertical-align: middle;
   }
 </style>
