@@ -1,5 +1,13 @@
 <template>
   <div id="app">
+    <nav class="tm-navbar uk-navbar uk-navbar-attached">
+      <div class="uk-container uk-container-center vmail-header">
+        <a href="">
+          <img class="vmail-logo" src="./assets/vue-mailer-logo-v02.svg" alt="vue-mailer-logo">
+        </a>
+        <h1>Vue Recruit Mailer</h1>
+      </div>
+    </nav>
     <!--
     <div id="glayer">
 
@@ -8,7 +16,7 @@
     <!--
     <img src="./assets/logo.png">
     -->
-    <img src="./assets/vue-mailer-logo-v01.svg" alt="vue-mailer-logo">
+
     <!--
     <hello></hello>
     <world></world>
@@ -40,6 +48,20 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  /*margin-top: 60px;*/
 }
+</style>
+<style scoped>
+  img.vmail-logo{
+    height: 40px;
+  }
+  div.vmail-header{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  div.vmail-header h1{
+    display: inline;
+    margin: 10px;
+    vertical-align: middle;
+  }
 </style>
