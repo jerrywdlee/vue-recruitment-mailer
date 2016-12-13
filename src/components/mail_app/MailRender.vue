@@ -4,7 +4,7 @@
     <h1>{{ msg }}</h1>
   -->
     <div class="tagInputSpace">
-      <table style="border-collapse: collapse;">
+      <table width="98%" style="border-collapse: collapse;">
         <tr v-for="tag in mailTags" class="tagTableRow" :class="'vmail_'+tag">
           <td class="tagLabel">
             <span class="tagLabel">
@@ -156,23 +156,27 @@
     border-radius:5px;
     float:left;
     padding:10px;
+    padding-left: 8px;
+    padding-right: 8px;
     /*position:relative;*/
   }
   div.mailRender{
     position: relative;
-    height: 455px;
-    border: 1px solid orange;
-    margin-left: 10px;
-    width: auto;
+    /*height: 455px;*/
+    /*border: 1px solid orange;*/
+    /*margin-left: 10px;
+    width: auto;*/
   }
   div.tagInputSpace{
     border-radius:5px;
     padding: 5px;
-    border: 1px solid orange;
+    /*border: 1px solid orange;*/
+    border: 0.5px dashed #e7e088;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
     overflow-x: scroll;
     overflow-y: scroll;
     height: calc(99% - 45px);
-    min-width: 200px;
+    /*min-width: 200px;*/
   }
   a {
     /* color: #42b983; */
