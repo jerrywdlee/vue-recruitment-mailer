@@ -13,6 +13,8 @@ npm run dev
 
 # build for production with minification
 npm run build
+cd dist/
+python -m SimpleHTTPServer 8000 # visit on localhost:8000
 
 # run unit tests
 npm run unit

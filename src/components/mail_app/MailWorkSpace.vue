@@ -106,6 +106,7 @@
               </td>
               <td class="input_emails subject-warp">
                 <span id="subject" contentEditable="true" @focus="setLastFocusId" @keyup="setMessage">
+                  This Is An Awsome Demo!
                   <!-- <span @blur="setLastFocusId"></span> -->
                 </span>
                 <span id="subject-back" v-html="subjectBack"></span>
@@ -121,13 +122,29 @@
         </div>
       </div>
       <div class="workspace">
-        <div id="div_f" class="editable front" contentEditable="true" @keyup="setMessage" @blur="setLastFocusId"></div>
+        <div id="div_f" class="editable front" contentEditable="true" @keyup="setMessage" @blur="setLastFocusId">
+          Hello @#targetName#@<br>This is @#myName#@<br>Vue.js Is Awsome!
+        </div>
         <div id="div_b" class="editable back" v-html="backMessage"></div>
       </div>
       <div class="toolBar">
-        <select class="fixedPhrase" v-model="selectedMailTemp">
-          <option :value="index" v-for="(fixedPhrase, index) in fixedPhraseAry">{{ fixedPhrase.name }}</option>
+        <button class="uk-button uk-button-primary" @click="saveMailToLocal">
+          <i class="uk-icon-justify uk-icon-floppy-o"></i>
+          <span class="vmail_label">Save!</span>
+        </button>
+        <button class="uk-button uk-button-danger"
+        :disabled="isLocalTemplate? false : true"
+        @click="delLocalMail">
+          <i class="uk-icon-justify uk-icon-trash"></i>
+          <span class="vmail_label">Del</span>
+        </button>
+        <select class="fixedPhrase" id="mailTempSelect" v-model="selectedMailTemp">
+          <option :value="index"
+          v-for="(fixedPhrase, index) in fixedPhraseAry">
+          {{ fixedPhrase.name }}{{ fixedPhrase['local'] ? ' (Local)' : ' (Remote)' }}
+        </option>
         </select>
+
       </div>
     </div>
     <MailRender
@@ -146,18 +163,21 @@ export default {
   name: 'MailWorkSpace',
   data () {
     return {
-      messageF: 'Plz \n Type \n Sth.',
+      messageF: 'Hello @#targetName#@\nThis is @#myName#@\nVue.js Is Awsome!',
       messageB: '',
       tags: ['targetName', 'targetEmail', 'myName'],
       selectedTags: [],
-      toAddressAry: ['aaa@sample.com'],
+      toAddressAry: ['aaa@sample.com', '@#targetEmail#@'],
       ccAddressAry: ['ccc@sample.com'],
-      bccAddressAry: ['eee@sample.com', 'fff@sample.cn'],
+      bccAddressAry: ['eee@sample.com'],
       // toAddressRaw: '',
       // ccAddressRaw: '',
       // bccAddressRaw: '',
-      mailSubjctRaw: '',
-      fixedPhraseAry: fixedPhrase,
+      mailSubjctRaw: 'This Is An Awsome Demo!',
+      // fixedPhraseAry: fixedPhrase,
+      localTemplatesAry: [],
+      isLocalTemplate: false,
+      templateName: '',
       selectedMailTemp: []
       // rawTags: [],
       // tagReg: null
@@ -174,7 +194,7 @@ export default {
     // this may also be put in to `methods` but `computed` is better
     backMessage: function () {
       // `this` points to the vm instance
-      console.log(this.messageB)
+      // console.log(this.messageB)
       // let tmpReg = new RegExp('(' + this.rawTags.join('|') + ')', 'g')
       console.log(this.rawTags)
       // console.log(tmpReg)
@@ -248,6 +268,27 @@ export default {
         return (new RegExp('(' + tmpTagArry.join('|') + ')', 'g'))
       } else {
         return null
+      }
+    },
+    fixedPhraseAry: {
+      get: function () {
+        let remoteAry = fixedPhrase || []
+        this.localTemplatesAry = JSON.parse(window.localStorage.getItem('localTemplates')) || []
+        // console.log(remoteAry)
+        // console.log(this.localTemplatesAry)
+        // let localAry = JSON.parse(this.localTemplates) || []
+        return remoteAry.concat(this.localTemplatesAry)
+      },
+      set: function (newLocalAry) {
+        console.log('newLocalAry', newLocalAry)
+        if (newLocalAry.length === undefined) {
+          this.localTemplatesAry.push(newLocalAry)
+        } else {
+          this.localTemplatesAry = newLocalAry
+        }
+        // console.log(this.localTemplatesAry)
+        let localTemplates = JSON.stringify(this.localTemplatesAry)
+        window.localStorage.setItem('localTemplates', localTemplates)
       }
     }
   },
@@ -486,6 +527,39 @@ export default {
         default:
 
       }
+    },
+    saveMailToLocal: function (e) {
+      console.log('saveMailToLocal')
+      let newLocalmailName = window
+      .prompt(`Please Set New Title\nRemain ${15 - this.localTemplatesAry.length} Slots`, 'Sample Template')
+      let duplicateName = this.fixedPhraseAry.filter((x, i, self) => {
+        return x.name === newLocalmailName
+      })
+      if (!duplicateName[0]) {
+        let newLocalmail = {
+          name: newLocalmailName,
+          local: true,
+          to: this.toAddressAry,
+          cc: this.ccAddressAry,
+          bcc: this.bccAddressAry,
+          subject: this.mailSubjctRaw,
+          mailText: this.messageF
+        }
+        this.fixedPhraseAry = newLocalmail
+      } else {
+        window.alert(`The Name [[ ${newLocalmailName} ]] Has Been Used!\nPlease Try a New Name.`)
+      }
+    },
+    delLocalMail: function (e) {
+      let confirm = window.confirm(`Do You Want To Delete This Mail Template\n [[ ${this.templateName} ]]`)
+      if (confirm) {
+        this.fixedPhraseAry = this.localTemplatesAry.filter((x, i, self) => {
+          return x.name !== this.templateName
+        })
+        // reset select
+        document.querySelector('#mailTempSelect option').selected = true
+        this.selectedMailTemp = 0
+      }
     }
   },
   watch: {
@@ -504,9 +578,12 @@ export default {
       }
     },
     selectedMailTemp: function (val) {
+      console.log('selectedMailTemp', this.selectedMailTemp)
       console.log(this.fixedPhraseAry[val].to)
       this.tags = []
       let tmpMailObj = this.fixedPhraseAry[val]
+      this.isLocalTemplate = tmpMailObj['local']
+      this.templateName = tmpMailObj['name']
       this.toAddressAry = tmpMailObj['to'] || []
       this.ccAddressAry = tmpMailObj['cc'] || []
       this.bccAddressAry = tmpMailObj['bcc'] || []

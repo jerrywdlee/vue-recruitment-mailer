@@ -42,7 +42,7 @@
     <p>{{ mailSubjctRaw }}</p>
   -->
     <div class="toolBar">
-      <button class="uk-button uk-button-primary"
+      <button class="uk-button uk-button-success"
       @click="renderMail('mailto', $event)">
         <i class="uk-icon-justify uk-icon-envelope"></i>
         <span class="vmail_label"> Create!</span>
