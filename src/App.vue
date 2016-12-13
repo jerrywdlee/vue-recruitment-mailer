@@ -6,7 +6,7 @@
           <img class="vmail-logo" src="./assets/vue-mailer-logo-v02.svg" alt="vue-mailer-logo">
         </a>
         <h1>Vue Recruit Mailer</h1>
-        <span class="uk-badge uk-badge-success vmail-version" style="">v0.0.21</span>
+        <span class="uk-badge uk-badge-success vmail-version" style="">v0.0.23</span>
       </div>
     </nav>
     <!--

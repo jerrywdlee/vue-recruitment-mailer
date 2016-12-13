@@ -84,7 +84,7 @@
           :disabled="isLocalTemplate? false : true"
           @click="delLocalMail">
             <i class="uk-icon-justify uk-icon-trash"></i>
-            <span class="vmail_label">Del</span>
+            <span class="vmail_label">Del Local</span>
           </button>
           <select class="fixedPhrase" id="mailTempSelect" v-model="selectedMailTemp">
             <option :value="index"
@@ -817,7 +817,7 @@ export default {
 
     /*border: 0.5px solid #ffd1cc;*/
     border: 0.5px dashed #e7e088;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    /*box-shadow: 0 1px 1px rgba(0,0,0,0.1);*/
     float:none;
   }
   div.adress table td>span{
