@@ -17,6 +17,7 @@ h1 {
 
 
 @media (min-width: 500px) and (max-width: 1024px) {
+  /*
   div.tagbar,div.workspace_wrap,div.mailRender{
     width: 90vw !important;
     min-width: 180px;
@@ -34,10 +35,11 @@ h1 {
 
   div.tagbar div.tags{
     width: 99%;
-  }
+  }*/
 }
 
 @media (min-width: 10px) and (max-width: 500px) {
+  /*
   div.tagbar,div.workspace_wrap,div.mailRender{
     width: 95% !important;
     min-width: 180px;
@@ -59,5 +61,14 @@ h1 {
   }
   div.tagbar div.tags{
     width: 99%;
+  }*/
+}
+
+@media (max-width: 959px) {
+  div.mailRender.uk-panel, div.tagbar.uk-panel {
+    height: 45vh;
+  }
+  div.workspace_wrap.uk-panel div.workspace {
+    height: 30vh;
   }
 }

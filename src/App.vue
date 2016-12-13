@@ -6,7 +6,7 @@
           <img class="vmail-logo" src="./assets/vue-mailer-logo-v02.svg" alt="vue-mailer-logo">
         </a>
         <h1>Vue Recruit Mailer</h1>
-        <span class="uk-badge uk-badge-success vmail-version" style="">v0.0.16</span>
+        <span class="uk-badge uk-badge-success vmail-version" style="">v0.0.23</span>
       </div>
     </nav>
     <!--
@@ -43,22 +43,25 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  /*margin-top: 60px;*/
-}
+  #app{
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    background: transparent;
+    /*margin-top: 60px;*/
+  }
 </style>
 <style scoped>
   img.vmail-logo{
     height: 40px;
   }
   div.vmail-header{
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 5px;
+    /*line-height:100%;*/
+    /*padding-top: 10px;*/
+    margin-bottom: 5px;
   }
   div.vmail-header h1{
     display: inline;

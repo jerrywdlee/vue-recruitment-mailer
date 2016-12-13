@@ -1,155 +1,155 @@
 <template>
-  <div class="mail_app">
-    <div class="selectedTagStyles">
+  <div class="mail_app uk-flex uk-grid uk-grid-small uk-grid-match" data-uk-grid-match="{target:'.uk-panel'}" data-uk-grid-margin="">
+    <div class="selectedTagStyles" style="display:none">
     </div>
-    <div class="tagbar">
-      <div class="tags">
-        <table style="border-collapse: collapse;" width="98%">
-          <tr v-for="tag in tags" class="tagTableRow" :class="'vmail_'+tag">
-            <td >
-              <span class="tagLabel"
-              @keydown.enter="renewTags(tag, $event)"
-              @blur="renewTags(tag, $event)"
-              @dblclick="editTag( tag )"
-              :id="'vmail_tag_'+tag">
-              {{ tag }}
-              </span>
-            </td>
-            <td>
-              <input type="checkbox" :value="tag" v-model="selectedTags">
-            </td>
-            <td style="padding-top:3.6px;padding-left:6px;">
-              <a href="javascript:void(0);" class="uk-icon-hover uk-icon-edit" @click="editTag( tag )"></a>
-            </td>
-            <td style="padding-top:2.5px;padding-left:6px;">
-              <a href="javascript:void(0);" class="uk-icon-hover uk-icon-sign-in" @click="insertTag( tag )"></a>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="4">
-              <input type="text" placeholder="New Tag" style="width:95%" @keydown.enter="addTag($event)">
-            </td>
-            <!--
-            <td style="padding-top:2.5px;padding-left:3px;">
-              <a class="uk-icon-hover uk-icon-plus-square" style="font-size:1.5em;"></a>
-            </td>
-            -->
-          </tr>
-        </table>
-      </div>
-      <div class="toolBar">
-        <button class="uk-button uk-button-danger"
-        :disabled="selectedTags[0]? false : true"
-        @click="delTag">
-          <i class="uk-icon-justify uk-icon-trash"></i>
-          <span class="vmail_label">Delete</span>
-        </button>
-      </div>
-    </div>
-    <div class="workspace_wrap">
-      <div class="adress" style="padding:0;padding-bottom:2px;">
-        <div style="width:inherit;border: 0.5px solid #ffd1cc;float:none;">
-          <table width="98%">
-            <tr>
-              <td class="address_label">
-                <span>To:</span>
-              </td>
-              <td class="input_emails">
-                <span v-for="mail in toAddressAry" class="emails"
-                  :class="mail.match(/@#(?:.*?)#@/)?'vmail_'+mail.replace(/@#|#@/g, '') : ''">{{ mail }}
-                  <i class="uk-icon-hover uk-icon-times" @click="delEmail(mail, 'to', $event)"></i></span>
-                <span id="to_address" class="single-line" contentEditable="true" @focus="setLastFocusId" @keydown.enter.stop="addEmail(null, 'to', $event)">
-                  <!-- <span @blur="setLastFocusId"></span> -->
-                </span>
-              </td>
-            </tr>
-            <tr>
-              <td class="address_label">
-                <span>CC:</span>
-              </td>
-              <td class="input_emails">
-                <span v-for="mail in ccAddressAry" class="emails">{{ mail }}
-                  <i class="uk-icon-hover uk-icon-times" @click="delEmail(mail, 'cc', $event)"></i></span>
-                <span id="cc_address" class="single-line" contentEditable="true" @focus="setLastFocusId" @keydown.enter.stop="addEmail(null, 'cc', $event)">
-                  <!-- <span @blur="setLastFocusId"></span> -->
-                </span>
-              </td>
-            </tr>
-          </table>
-            <!--
-            <span>To:</span>
-            <span id="to_address" contentEditable="true" @blur="setLastFocusId">
-              aaa@example.com</span>
-            -->
+    <div class="uk-width-large-1-2 uk-width-medium-1-1 uk-width-1-1">
+      <div class="workspace_wrap uk-panel">
+        <div class="adress" style="padding:0;padding-bottom:2px;">
+          <div class="adress-inner-div" style="">
+            <table width="98%">
+              <tr>
+                <td class="address_label">
+                  <span>To:</span>
+                </td>
+                <td class="input_emails">
+                  <span v-for="mail in toAddressAry" class="emails"
+                    :class="mail.match(/@#(?:.*?)#@/)?'vmail_'+mail.replace(/@#|#@/g, '') : ''">{{ mail }}
+                    <i class="uk-icon-hover uk-icon-times" @click="delEmail(mail, 'to', $event)"></i></span>
+                  <span id="to_address" class="single-line" contentEditable="true" @focus="setLastFocusId" @keydown.enter.stop="addEmail(null, 'to', $event)">
+                    <!-- <span @blur="setLastFocusId"></span> -->
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td class="address_label">
+                  <span>CC:</span>
+                </td>
+                <td class="input_emails">
+                  <span v-for="mail in ccAddressAry" class="emails">{{ mail }}
+                    <i class="uk-icon-hover uk-icon-times" @click="delEmail(mail, 'cc', $event)"></i></span>
+                  <span id="cc_address" class="single-line" contentEditable="true" @focus="setLastFocusId" @keydown.enter.stop="addEmail(null, 'cc', $event)">
+                    <!-- <span @blur="setLastFocusId"></span> -->
+                  </span>
+                </td>
+              </tr>
+            </table>
               <!--
-              <input id="to_address" type="text" name="name" value="aaa@example.com">
+              <span>To:</span>
+              <span id="to_address" contentEditable="true" @blur="setLastFocusId">
+                aaa@example.com</span>
+              -->
+                <!--
+                <input id="to_address" type="text" name="name" value="aaa@example.com">
+              -->
+
+              <!--
+              <span>CC:</span> <span>bbb@example.com</span>
+              <span>Bcc:</span> <span>bbb@example.com</span>
             -->
 
+            <table width="98%" style="margin-top:8px;">
+              <tr>
+                <td class="address_label">
+                  <span>Sub:</span>
+                </td>
+                <td class="input_emails subject-warp">
+                  <span id="subject" contentEditable="true" @focus="setLastFocusId" @keyup="setMessage">
+                    This Is An Awsome Demo!
+                    <!-- <span @blur="setLastFocusId"></span> -->
+                  </span>
+                  <span id="subject-back" v-html="subjectBack"></span>
+                </td>
+              </tr>
+            </table>
             <!--
-            <span>CC:</span> <span>bbb@example.com</span>
-            <span>Bcc:</span> <span>bbb@example.com</span>
-          -->
+              <span>Sub:</span>
+              <span id="subject" contentEditable="true" @blur="setLastFocusId">
+                AAAAAA
+              </span>
+            -->
+          </div>
         </div>
-        <!--
-        <div style="width:inherit;border: 0.5px solid #ffd1cc;float:none;margin-top:2px;">
-          <span>CC:</span>
-          <span id="cc_address" contentEditable="true" @blur="setLastFocusId">
-            bbb@example.com
-          </span>
+        <div class="workspace">
+          <div id="div_f" class="editable front" contentEditable="true" @keyup="setMessage" @blur="setLastFocusId">
+            Hello @#targetName#@<br>This is @#myName#@<br>Vue.js Is Awsome!
+          </div>
+          <div id="div_b" class="editable back" v-html="backMessage"></div>
         </div>
-      -->
-        <div style="width:inherit;border: 0.5px solid #ffd1cc;margin-top:2px;" >
-          <table width="98%">
-            <tr>
-              <td class="address_label">
-                <span>Sub:</span>
-              </td>
-              <td class="input_emails subject-warp">
-                <span id="subject" contentEditable="true" @focus="setLastFocusId" @keyup="setMessage">
-                  This Is An Awsome Demo!
-                  <!-- <span @blur="setLastFocusId"></span> -->
-                </span>
-                <span id="subject-back" v-html="subjectBack"></span>
-              </td>
-            </tr>
-          </table>
-          <!--
-            <span>Sub:</span>
-            <span id="subject" contentEditable="true" @blur="setLastFocusId">
-              AAAAAA
-            </span>
-          -->
-        </div>
-      </div>
-      <div class="workspace">
-        <div id="div_f" class="editable front" contentEditable="true" @keyup="setMessage" @blur="setLastFocusId">
-          Hello @#targetName#@<br>This is @#myName#@<br>Vue.js Is Awsome!
-        </div>
-        <div id="div_b" class="editable back" v-html="backMessage"></div>
-      </div>
-      <div class="toolBar">
-        <button class="uk-button uk-button-primary" @click="saveMailToLocal">
-          <i class="uk-icon-justify uk-icon-floppy-o"></i>
-          <span class="vmail_label">Save!</span>
-        </button>
-        <button class="uk-button uk-button-danger"
-        :disabled="isLocalTemplate? false : true"
-        @click="delLocalMail">
-          <i class="uk-icon-justify uk-icon-trash"></i>
-          <span class="vmail_label">Del</span>
-        </button>
-        <select class="fixedPhrase" id="mailTempSelect" v-model="selectedMailTemp">
-          <option :value="index"
-          v-for="(fixedPhrase, index) in fixedPhraseAry">
-          {{ fixedPhrase.name }}{{ fixedPhrase['local'] ? ' (Local)' : ' (Remote)' }}
-        </option>
-        </select>
+        <div class="toolBar">
+          <button class="uk-button uk-button-primary" @click="saveMailToLocal">
+            <i class="uk-icon-justify uk-icon-floppy-o"></i>
+            <span class="vmail_label">Save!</span>
+          </button>
+          <button class="uk-button uk-button-danger"
+          :disabled="isLocalTemplate? false : true"
+          @click="delLocalMail">
+            <i class="uk-icon-justify uk-icon-trash"></i>
+            <span class="vmail_label">Del Local</span>
+          </button>
+          <select class="fixedPhrase" id="mailTempSelect" v-model="selectedMailTemp">
+            <option :value="index"
+            v-for="(fixedPhrase, index) in fixedPhraseAry">
+            {{ fixedPhrase.name }}{{ fixedPhrase['local'] ? ' (Local)' : ' (Remote)' }}
+          </option>
+          </select>
 
+        </div>
       </div>
     </div>
-    <MailRender
-    :mail-tags="tags" :mail-template="messageF" :mail-reg="setReg" :mail-subjct-raw="mailSubjctRaw"
-    :to-address-ary="toAddressAry" :cc-address-ary="ccAddressAry" :bcc-address-ary="bccAddressAry"></MailRender>
+
+    <div class="uk-width-large-1-4 uk-width-small-1-2 uk-flex-order-first-large">
+      <div class="tagbar uk-panel">
+        <div class="tags">
+          <table style="border-collapse: collapse;" width="98%">
+            <tr v-for="tag in tags" class="tagTableRow" :class="'vmail_'+tag">
+              <td >
+                <span class="tagLabel"
+                @keydown.enter="renewTags(tag, $event)"
+                @blur="renewTags(tag, $event)"
+                @dblclick="editTag( tag )"
+                :id="'vmail_tag_'+tag">
+                {{ tag }}
+                </span>
+              </td>
+              <td>
+                <input type="checkbox" :value="tag" v-model="selectedTags">
+              </td>
+              <td style="padding-top:3.6px;padding-left:6px;">
+                <a href="javascript:void(0);" class="uk-icon-hover uk-icon-edit" @click="editTag( tag )"></a>
+              </td>
+              <td style="padding-top:2.5px;padding-left:6px;">
+                <a href="javascript:void(0);" class="uk-icon-hover uk-icon-sign-in" @click="insertTag( tag )"></a>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4">
+                <input type="text" placeholder="New Tag" style="width:95%" @keydown.enter="addTag($event)">
+              </td>
+              <!--
+              <td style="padding-top:2.5px;padding-left:3px;">
+                <a class="uk-icon-hover uk-icon-plus-square" style="font-size:1.5em;"></a>
+              </td>
+              -->
+            </tr>
+          </table>
+        </div>
+        <div class="toolBar">
+          <button class="uk-button uk-button-danger"
+          :disabled="selectedTags[0]? false : true"
+          @click="delTag">
+            <i class="uk-icon-justify uk-icon-trash"></i>
+            <span class="vmail_label">Delete</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="uk-width-large-1-4 uk-width-small-1-2 ">
+      <MailRender class="uk-panel"
+      :mail-tags="tags" :mail-template="messageF" :mail-reg="setReg" :mail-subjct-raw="mailSubjctRaw"
+      :to-address-ary="toAddressAry" :cc-address-ary="ccAddressAry" :bcc-address-ary="bccAddressAry"></MailRender>
+    </div>
+
   </div>
 
 </template>
@@ -628,6 +628,13 @@ export default {
     display:inline;
     white-space:nowrap;
   }
+
+  /* for all panels */
+  div.uk-panel{
+    border: 1px solid #b4d575;
+    border-top: 3px solid #b4d575;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+  }
 </style>
 
 <style scoped>
@@ -642,13 +649,25 @@ export default {
   }
   div.workspace_wrap{
     position: relative;
-    border: 1px solid green;
-    width: calc(80% - 350px);
-    min-width: 250px;
+    /*border: 1px solid green;*/
+    /*width: calc(80% - 350px);*/
+    /*min-width: 250px;*/
     /*max-width: 600px;*/
-    padding-left: 4.5px;
-    height: 455px;
+    padding-left: 8px;
+    padding-right: 8px;
+    /*height: 455px;*/
+    height: auto;
+    padding-bottom: 45px;
   }
+  /*
+  div.workspace_wrap:after{
+    content: ".";
+    display: block;
+    clear: both;
+    height: 0;
+    visibility: hidden;
+  }*/
+
   div.tags, div.workspace{
     overflow-x: hidden; /* Hide horizontal scrollbar */
     overflow-y: scroll; /* Add vertical scrollbar */
@@ -656,21 +675,23 @@ export default {
   div.tagbar{
     position: relative;
     float: left;
-    border: 1px solid magenta;
-    margin-left: -10px;
-    margin-right: 10px;
-    padding-left: 3px;
-    width: 15%;
+    /*border: 1px solid magenta;*/
+    /*margin-left: -10px;*/
+    margin-right: 8px;
+    padding-left: 8px;
+    /*width: 15%;
     min-width:180px;
     max-width:20vw;
-    height: 455px;
+    height: 455px;*/
   }
   div.tags{
-    border: 0.5px solid red;
+    border: 0.5px dashed #e7e088;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    /*border-top: 2px solid #f16e2f;*/
     width: 95%;
     padding:5px;
     padding-left: 5px;
-    height: 87%;
+    height: calc(99% - 45px);
     text-align: left;
     overflow-x: scroll;
   }
@@ -708,8 +729,11 @@ export default {
     width:100%;
     min-width:250px;
     max-width:none;
-    height: 58%;
-    border: 0.5px solid Cyan;
+    /*height: 58%;*/
+    height: 47vh;
+    /*border: 0.5px solid Cyan;*/
+    border: 1px dashed #e7e088;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
     padding: 0px;
     text-align:center;
   }
@@ -719,9 +743,10 @@ export default {
     text-align: left;
     width: 99%;
     height: 95%;
+
     /*border: 2px solid #ccc;*/
     padding: 5px;
-    padding-left: 8px;
+    padding-left: 10px;
     top:0px;
     left:50%;
     margin-right: -50%;
@@ -781,6 +806,19 @@ export default {
     width:98%;
     min-width:250px;
     max-width:none;
+  }
+  div.adress-inner-div{
+    /*padding-left: 5px;
+    padding-right: 5px;*/
+    padding: 5px;
+    padding-top: 2px;
+    margin-bottom: 2px;
+    width:calc(100%);
+
+    /*border: 0.5px solid #ffd1cc;*/
+    border: 0.5px dashed #e7e088;
+    /*box-shadow: 0 1px 1px rgba(0,0,0,0.1);*/
+    float:none;
   }
   div.adress table td>span{
     font-weight: bold;
