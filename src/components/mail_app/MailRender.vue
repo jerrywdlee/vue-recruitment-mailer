@@ -171,7 +171,7 @@
     border: 1px solid orange;
     overflow-x: scroll;
     overflow-y: scroll;
-    height: 88%;
+    height: calc(99% - 45px);
     min-width: 200px;
   }
   a {

@@ -647,8 +647,19 @@ export default {
     min-width: 250px;
     /*max-width: 600px;*/
     padding-left: 4.5px;
-    height: 455px;
+    /*height: 455px;*/
+    height: auto;
+    padding-bottom: 45px;
   }
+  /*
+  div.workspace_wrap:after{
+    content: ".";
+    display: block;
+    clear: both;
+    height: 0;
+    visibility: hidden;
+  }*/
+
   div.tags, div.workspace{
     overflow-x: hidden; /* Hide horizontal scrollbar */
     overflow-y: scroll; /* Add vertical scrollbar */
@@ -659,7 +670,7 @@ export default {
     border: 1px solid magenta;
     margin-left: -10px;
     margin-right: 10px;
-    padding-left: 3px;
+    padding-left: 8px;
     width: 15%;
     min-width:180px;
     max-width:20vw;
@@ -670,7 +681,7 @@ export default {
     width: 95%;
     padding:5px;
     padding-left: 5px;
-    height: 87%;
+    height: calc(99% - 45px);
     text-align: left;
     overflow-x: scroll;
   }
@@ -718,7 +729,8 @@ export default {
   div.front,div.back{
     text-align: left;
     width: 99%;
-    height: 95%;
+    /*height: 95%;*/
+    height: 47vh;
     /*border: 2px solid #ccc;*/
     padding: 5px;
     padding-left: 8px;
