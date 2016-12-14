@@ -42,6 +42,11 @@
     <p>{{ mailSubjctRaw }}</p>
   -->
     <div class="toolBar">
+      <button type="button" class="uk-button uk-button-warning"
+      style="float:left" @click="setCsv">
+        <i class="uk-icon-justify uk-icon-table"></i>
+        <span class="vmail_label"> CSV</span>
+      </button>
       <button class="uk-button uk-button-success"
       @click="renderMail('mailto', $event)">
         <i class="uk-icon-justify uk-icon-envelope"></i>
@@ -53,14 +58,45 @@
     <div id="modal" class="uk-modal uk-close" :style="{display: modalDisplay}" @click.self="closeModal">
       <div class="uk-modal-dialog">
         <button type="button" class="uk-modal-close uk-close" @click="closeModal"></button>
-        <div class="uk-modal-header"></div>
-        <div class="my-modal-body"></div>
-        <div class="uk-modal-footer uk-text-right">
-          <!--
-          <button type="button" class="uk-button" @click="closeModal">Cancel</button>
 
-          <a class="uk-button uk-button-success" :href="modalButtonHref">Send!</a>
-        -->
+        <!-- Header -->
+        <div class="uk-modal-header" v-if="modalFooter === 'mailto_send'">
+          <div class="header-wrapper">
+            &nbsp;&nbsp;<b>Subject:</b> {{ mailSubjct }}
+            【 <b>Mail To:</b> {{ toAddress[0] }}... 】
+          </div>
+          <span class="header-html-insert-target"></span>
+        </div>
+
+        <div class="uk-modal-header" style="padding-top:15px;padding-bottom:12px;" v-if="modalFooter === 'set_csv'">
+          <div class="header-wrapper">
+            <b style="font-size:1.7em;">Setting CSV</b>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="my-modal-body" v-if="modalFooter === 'mailto_send'">
+          <span class="body-html-insert-target"></span>
+        </div>
+
+        <div class="my-modal-body" v-if="modalFooter === 'set_csv'">
+          <span class="body-html-insert-target"></span>
+        </div>
+
+        <!-- Footer -->
+        <div class="uk-modal-footer uk-text-right" v-if="modalFooter === 'mailto_send'">
+          <button type="button" class="uk-button" @click="closeModal">Cancel</button>
+          <a class="uk-button uk-button-success" :href="modalButtonHref">
+            <i class="uk-icon-justify uk-icon-paper-plane"></i>
+            <span class="vmail_label"> Send!</span>
+          </a>
+        </div>
+        <div class="uk-modal-footer uk-text-right" v-if="modalFooter === 'set_csv'">
+          <div class="footer-wrapper" >
+            <button type="button" class="uk-button" @click="closeModal" style="float:left">Cancel</button>
+            <button type="button" class="uk-button" @click="closeModal">Cancel</button>
+            <span class="footer-html-insert-target"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -80,6 +116,7 @@
         // msg: 'Welcome to Your Vue.js App',
         infoTagObj: {},
         modalDisplay: 'none',
+        modalFooter: 'mailto_send',
         toAddress: [],
         ccAddress: [],
         bccAddress: [],
@@ -96,7 +133,7 @@
         urlStr += ('subject=' + encodeURI(this.mailSubjct) + '&')
         var bodyStr = (this.mailText).replace(/\r\n|\r|\n/g, '%0d%0a')
         urlStr += ('body=' + bodyStr)
-        console.log(urlStr)
+        // console.log(urlStr)
         return urlStr
       }
     },
@@ -133,13 +170,24 @@
             // this.ccAddress = renderTags.renderTags(this.mailReg, this.ccAddressRaw, this.infoTagObj)
             // this.bccAddress = renderTags.renderTags(this.mailReg, this.bccAddressRaw, this.infoTagObj)
 
-            let footerBtn = ''
+            // let footerBtn = ''
             // footerBtn = `<button type="button" class="uk-button" @click="closeModal">Cancel</button>`
-            footerBtn += `<a class="uk-button uk-button-success" href="${this.modalButtonHref}">Send!</a>`
-            modalHelper.openModal('Mail To: ' + this.toAddress[0], this.mailText.replace(/\r|\n|\r\n/g, '<br>'), footerBtn)
+            /*
+            footerBtn += `<a class="uk-button uk-button-success" href="${this.modalButtonHref}">
+                          <i class="uk-icon-justify uk-icon-paper-plane"></i>&nbsp;Send!</a>`
+            */
+            this.modalFooter = 'mailto_send' // set modal footer mode to mailto mode
+            // modalHelper.openModal('Mail To: ' + this.toAddress[0], this.mailText.replace(/\r|\n|\r\n/g, '<br>'), footerBtn)
+            modalHelper.openModal(null, this.mailText.replace(/\r|\n|\r\n/g, '<br>'), null)
             this.modalDisplay = 'block'
             console.log('mailto', this.mailText, this.mailSubjctRaw, this.mailSubjct)
         }
+      },
+      setCsv: function (e) {
+        console.log('setCsv')
+        this.modalFooter = 'set_csv'
+        modalHelper.openModal(null, null, null)
+        this.modalDisplay = 'block'
       },
       closeModal: function (e) {
         modalHelper.closeModal().then(
@@ -218,6 +266,7 @@
   div.toolBar button{
     margin-top: 5px;
     margin-right: 10px;
+    margin-left: 10px;
     float: right;
   }
 
