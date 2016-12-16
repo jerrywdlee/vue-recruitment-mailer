@@ -6,7 +6,7 @@
       <div class="workspace_wrap uk-panel">
         <div class="adress" style="padding:0;padding-bottom:2px;">
           <div class="adress-inner-div" style="">
-            <table width="98%">
+            <table class="vmail_to_address">
               <tr>
                 <td class="address_label">
                   <span>To:</span>
@@ -20,6 +20,8 @@
                   </span>
                 </td>
               </tr>
+              </table>
+              <table class="vmail_cc_address">
               <tr>
                 <td class="address_label">
                   <span>CC:</span>
@@ -47,7 +49,7 @@
               <span>Bcc:</span> <span>bbb@example.com</span>
             -->
 
-            <table width="98%" style="margin-top:8px;">
+            <table class="vmail_subject" style="margin-top:2px;">
               <tr>
                 <td class="address_label">
                   <span>Sub:</span>
@@ -74,6 +76,9 @@
             Hello @#targetName#@<br>This is @#myName#@<br>Vue.js Is Awsome!
           </div>
           <div id="div_b" class="editable back" v-html="backMessage"></div>
+        </div>
+        <div class="workspace-background uk-container-center uk-text-center uk-vertical-align">
+          <img class="uk-vertical-align-bottom" src="../../assets/my-heraldry-mark.png" alt="my-heraldry-mark" />
         </div>
         <div class="toolBar">
           <button class="uk-button uk-button-primary" @click="saveMailToLocal">
@@ -739,7 +744,7 @@ export default {
   }
 
 
-  div.front,div.back{
+  div.front, div.back, div.workspace-background{
     text-align: left;
     width: 99%;
     height: 95%;
@@ -766,12 +771,23 @@ export default {
     /*background: yellow;*/
   }
 
-  div.back{
+  div.back, div.workspace-background{
     position:absolute;
     /*margin-left:-40%;*/
     z-index:-1;
     color: rgba(0,0,0,0.25);
     word-break: break-all;
+  }
+  div.workspace-background{
+    position: absolute;
+    height: 100%;
+    z-index:-5;
+    /*background: url('../../assets/logo.png') no-repeat center center;*/
+    opacity: 0.1;
+  }
+  div.workspace-background>img{
+    margin-bottom: 45px;
+
   }
 
   select.fixedPhrase{
@@ -819,6 +835,9 @@ export default {
     border: 0.5px dashed #e7e088;
     /*box-shadow: 0 1px 1px rgba(0,0,0,0.1);*/
     float:none;
+  }
+  .adress-inner-div>table{
+    width: 98%;
   }
   div.adress table td>span{
     font-weight: bold;

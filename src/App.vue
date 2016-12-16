@@ -5,7 +5,8 @@
         <a href="">
           <img class="vmail-logo" src="./assets/vue-mailer-logo-v02.svg" alt="vue-mailer-logo">
         </a>
-        <h1>Vue Recruit Mailer</h1>
+        <h1 class="uk-hidden-small">Vue Recruit Mailer</h1>
+        <h2 class="uk-visible-small">Vue R Mailer</h2>
         <span class="uk-badge uk-badge-success vmail-version" style="">v0.0.23</span>
       </div>
     </nav>
@@ -55,7 +56,7 @@ export default {
 </style>
 <style scoped>
   img.vmail-logo{
-    height: 40px;
+    max-height: 38px;
   }
   div.vmail-header{
     margin-top: 5px;
@@ -63,7 +64,7 @@ export default {
     /*padding-top: 10px;*/
     margin-bottom: 5px;
   }
-  div.vmail-header h1{
+  div.vmail-header h1, div.vmail-header h2{
     display: inline;
     font-style: oblique;
     margin: 10px;
