@@ -58,7 +58,7 @@
     <div id="modal" class="uk-modal uk-close" :style="{display: modalDisplay}" @click.self="closeModal">
       <div class="uk-modal-dialog">
         <button type="button" class="uk-modal-close uk-close" @click="closeModal"></button>
-
+        <!-- mailto_send -->
         <!-- Header -->
         <div class="uk-modal-header" v-if="modalFooter === 'mailto_send'">
           <div class="header-wrapper">
@@ -67,22 +67,10 @@
           </div>
           <span class="header-html-insert-target"></span>
         </div>
-
-        <div class="uk-modal-header" style="padding-top:15px;padding-bottom:12px;" v-if="modalFooter === 'set_csv'">
-          <div class="header-wrapper">
-            <b style="font-size:1.7em;">Setting CSV</b>
-          </div>
-        </div>
-
         <!-- Body -->
         <div class="my-modal-body" v-if="modalFooter === 'mailto_send'">
           <span class="body-html-insert-target"></span>
         </div>
-
-        <div class="my-modal-body" v-if="modalFooter === 'set_csv'">
-          <span class="body-html-insert-target"></span>
-        </div>
-
         <!-- Footer -->
         <div class="uk-modal-footer uk-text-right" v-if="modalFooter === 'mailto_send'">
           <button type="button" class="uk-button" @click="closeModal">Cancel</button>
@@ -91,13 +79,40 @@
             <span class="vmail_label"> Send!</span>
           </a>
         </div>
+
+        <!-- mailto_send -->
+        <!-- Header -->
+        <div class="uk-modal-header" style="padding-top:15px;padding-bottom:12px;" v-if="modalFooter === 'set_csv'">
+          <div class="header-wrapper">
+            <b style="font-size:1.7em;color:#35495e;">Setting CSV</b>
+          </div>
+        </div>
+        <!-- Body -->
+        <div class="my-modal-body" v-if="modalFooter === 'set_csv'">
+          <span class="body-html-insert-target">
+            <span style="font-weight:bold;font-size:1.2em;font-style: oblique;">
+              Please Just Paste DataTable Here:
+            </span>
+          </span>
+          <div class="csv-input-box" contenteditable="true">
+            <table>
+              <tr>
+                <th style="padding-left:5px;padding-right:5px;"
+                    v-for="tag in mailTags">{{ tag }}</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- Footer -->
         <div class="uk-modal-footer uk-text-right" v-if="modalFooter === 'set_csv'">
           <div class="footer-wrapper" >
-            <button type="button" class="uk-button" @click="closeModal" style="float:left">Cancel</button>
+            <button type="button" class="uk-button" @click="dowloadCsvFile" style="float:left">Download CSV</button>
             <button type="button" class="uk-button" @click="closeModal">Cancel</button>
             <span class="footer-html-insert-target"></span>
           </div>
         </div>
+
+
       </div>
     </div>
   </div>
@@ -106,6 +121,7 @@
 <script>
   import renderTags from './helpers/renderTags.js'
   import modalHelper from './helpers/modalHelper.js'
+  import csvHelper from './helpers/csvHelper.js'
 
   export default {
     name: 'mailRender',
@@ -188,6 +204,11 @@
         this.modalFooter = 'set_csv'
         modalHelper.openModal(null, null, null)
         this.modalDisplay = 'block'
+      },
+      dowloadCsvFile: function (e) {
+        let csvTempUrl = csvHelper.createCsvFile(this.mailTags)
+        console.log(csvTempUrl)
+        csvHelper.downloadFile(csvTempUrl, `Template [${this.mailSubjctRaw}].csv`)
       },
       closeModal: function (e) {
         modalHelper.closeModal().then(
@@ -287,5 +308,16 @@
     text-align: left;
     /*overflow-x: none;
     overflow-y: scroll;*/
+  }
+
+  .csv-input-box{
+    overflow-x: scroll;
+    /*overflow-y: scroll;*/
+    margin-top: 5px;
+    min-height: 30vh;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
   }
 </style>

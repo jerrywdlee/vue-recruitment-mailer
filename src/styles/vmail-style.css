@@ -90,9 +90,32 @@ h1 {
 
 @media (max-width: 959px) {
   div.mailRender.uk-panel, div.tagbar.uk-panel {
-    height: 45vh;
+    height: 37vh;
+  }
+  div.uk-width-large-1-4.uk-width-small-1-2 {
+    padding-top: 0px;
   }
   div.workspace_wrap.uk-panel div.workspace {
-    height: 30vh;
+    height: 20vh;
+  }
+  div.adress-inner-div>table.vmail_to_address, div.adress-inner-div>table.vmail_cc_address {
+    width: 49%;
+    float: left;
+  }
+  div.workspace-background>img{
+    height: 250px;
+    width: auto;
+  }
+}
+@media (max-width: 767px) {
+  img.vmail-logo{
+    height: 30px !important;
+  }
+}
+
+@media (max-width: 450px) {
+  div.adress-inner-div>table.vmail_to_address, div.adress-inner-div>table.vmail_cc_address {
+    width: 98%;
+    float: left;
   }
 }
