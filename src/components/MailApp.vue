@@ -11,7 +11,7 @@
     name: 'MailApp',
     data () {
       return {
-        messageF: 'Plz \n Type \n Sth.'
+        // messageF: 'Plz \n Type \n Sth.'
       }
     },
     components: {
