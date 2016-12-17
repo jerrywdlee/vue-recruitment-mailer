@@ -4,10 +4,10 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    // index: path.resolve(__dirname, '../dist/index.html'),
-    // assetsRoot: path.resolve(__dirname, '../dist'),
-    index: path.resolve(__dirname, '../docs/index.html'), // for github pages
-    assetsRoot: path.resolve(__dirname, '../docs'), // for github pages
+    index: path.resolve(__dirname, '../dist/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist'),
+    // index: path.resolve(__dirname, '../docs/index.html'), // for github pages
+    // assetsRoot: path.resolve(__dirname, '../docs'), // for github pages
     assetsSubDirectory: 'static',
     assetsPublicPath: './', // HERE! use relative paths
     // so builded project can be used every where
