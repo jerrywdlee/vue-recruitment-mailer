@@ -84,17 +84,30 @@
         <!-- Header -->
         <div class="uk-modal-header" style="padding-top:15px;padding-bottom:12px;" v-if="modalFooter === 'set_csv'">
           <div class="header-wrapper">
-            <b style="font-size:1.7em;color:#35495e;">Setting CSV</b>
+            <b style="font-size:1.7em;color:#35495e;">Parse CSV or Table</b>
           </div>
         </div>
         <!-- Body -->
         <div class="my-modal-body" v-if="modalFooter === 'set_csv'">
           <span class="body-html-insert-target">
+            <!--
             <span style="font-weight:bold;font-size:1.2em;font-style: oblique;">
               Please Just Paste DataTable Here:
             </span>
+          -->
           </span>
-          <div class="csv-input-box" contenteditable="true">
+          <ul class="uk-tab uk-tab-flip" data-uk-tab="">
+            <span style="font-weight:bold;font-size:1.2em;font-style: oblique;line-height: 200%;">
+              Please Just Paste DataTable Here:
+            </span>
+            <li class="" aria-expanded="true" :class="infoTagObjAry[0] ? '' : 'uk-disabled'">
+              <a href="javascript:void(0)">Active</a>
+            </li>
+            <li class="uk-active" aria-expanded="false">
+              <a href="javascript:void(0)">CSV</a>
+            </li>
+          </ul>
+          <div class="csv-input-box" id="csv-input-box" contenteditable="true">
             <table>
               <tr>
                 <th style="padding-left:5px;padding-right:5px;"
@@ -106,8 +119,15 @@
         <!-- Footer -->
         <div class="uk-modal-footer uk-text-right" v-if="modalFooter === 'set_csv'">
           <div class="footer-wrapper" >
-            <button type="button" class="uk-button" @click="dowloadCsvFile" style="float:left">Download CSV</button>
+            <button type="button" class="uk-button uk-button-warning" @click="dowloadCsvFile" style="float:left">
+              <i class="uk-icon-justify uk-icon-cloud-download"></i>
+              Template CSV
+            </button>
             <button type="button" class="uk-button" @click="closeModal">Cancel</button>
+            <button type="button" class="uk-button uk-button-primary" @click="parseCsv">
+              <i class="uk-icon-justify uk-icon-bolt"></i>
+              Parse Table
+            </button>
             <span class="footer-html-insert-target"></span>
           </div>
         </div>
@@ -129,8 +149,8 @@
       'toAddressAry', 'ccAddressAry', 'bccAddressAry', 'mailSubjctRaw'],
     data () {
       return {
-        // msg: 'Welcome to Your Vue.js App',
         infoTagObj: {},
+        infoTagObjAry: [], // parsed from CSV
         modalDisplay: 'none',
         modalFooter: 'mailto_send',
         toAddress: [],
@@ -200,15 +220,27 @@
         }
       },
       setCsv: function (e) {
-        console.log('setCsv')
+        // console.log('setCsv')
         this.modalFooter = 'set_csv'
         modalHelper.openModal(null, null, null)
         this.modalDisplay = 'block'
       },
       dowloadCsvFile: function (e) {
         let csvTempUrl = csvHelper.createCsvFile(this.mailTags)
-        console.log(csvTempUrl)
+        // console.log(csvTempUrl)
         csvHelper.downloadFile(csvTempUrl, `Template [${this.mailSubjctRaw}].csv`)
+      },
+      parseCsv: function (e) {
+        let csvInputBox = document.getElementById('csv-input-box')
+        console.log(csvInputBox.innerText)
+        // let tmpCsvObj
+        csvHelper.parseCsv(csvInputBox.innerText, (data, e) => {
+          console.log('callback:')
+          console.log(data)
+          // tmpCsvObj = data
+          this.infoTagObjAry = data
+          console.log(this.infoTagObjAry)
+        })
       },
       closeModal: function (e) {
         modalHelper.closeModal().then(
@@ -312,12 +344,14 @@
 
   .csv-input-box{
     overflow-x: scroll;
-    /*overflow-y: scroll;*/
-    margin-top: 5px;
+    overflow-y: scroll;
+    /*margin-top: 5px;*/
     min-height: 30vh;
+    max-height: 53vh;
     padding-left: 10px;
     padding-right: 10px;
-    border-radius: 3px;
+    border-radius: 1px 1px 3px 3px;
     border: 1px solid #ccc;
+    border-top: none;
   }
 </style>
