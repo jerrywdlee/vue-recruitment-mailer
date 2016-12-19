@@ -55,86 +55,103 @@
     </div>
 
     <!-- Modal component -->
-    <div id="modal" class="uk-modal uk-close" :style="{display: modalDisplay}" @click.self="closeModal">
-      <div class="uk-modal-dialog">
-        <button type="button" class="uk-modal-close uk-close" @click="closeModal"></button>
+      <transition name="fade">
         <!-- mailto_send -->
-        <!-- Header -->
-        <div class="uk-modal-header" v-if="modalFooter === 'mailto_send'">
-          <div class="header-wrapper">
-            &nbsp;&nbsp;<b>Subject:</b> {{ mailSubjct }}
-            【 <b>Mail To:</b> {{ toAddress[0] }}... 】
+        <template v-if="modalFooter === 'mailto_send'">
+          <div class="uk-modal uk-open" style="display:block" @click.self="closeModal">
+            <div class="uk-modal-dialog">
+              <button type="button" class="uk-modal-close uk-close" @click="closeModal"></button>
+          <!-- Header -->
+          <div class="uk-modal-header" v-if="modalFooter === 'mailto_send'">
+            <div class="header-wrapper">
+              &nbsp;&nbsp;<b>Subject:</b> {{ mailSubjct }}
+              【 <b>Mail To:</b> {{ toAddress[0] }}... 】
+            </div>
+            <span class="header-html-insert-target"></span>
           </div>
-          <span class="header-html-insert-target"></span>
-        </div>
-        <!-- Body -->
-        <div class="my-modal-body" v-if="modalFooter === 'mailto_send'">
-          <span class="body-html-insert-target"></span>
-        </div>
-        <!-- Footer -->
-        <div class="uk-modal-footer uk-text-right" v-if="modalFooter === 'mailto_send'">
-          <button type="button" class="uk-button" @click="closeModal">Cancel</button>
-          <a class="uk-button uk-button-success" :href="modalButtonHref">
-            <i class="uk-icon-justify uk-icon-paper-plane"></i>
-            <span class="vmail_label"> Send!</span>
-          </a>
-        </div>
-
-        <!-- mailto_send -->
-        <!-- Header -->
-        <div class="uk-modal-header" style="padding-top:15px;padding-bottom:12px;" v-if="modalFooter === 'set_csv'">
-          <div class="header-wrapper">
-            <b style="font-size:1.7em;color:#35495e;">Parse CSV or Table</b>
+          <!-- Body -->
+          <div class="my-modal-body" v-if="modalFooter === 'mailto_send'" v-html="mailTextToShow">
+            <span class="body-html-insert-target"></span>
           </div>
-        </div>
-        <!-- Body -->
-        <div class="my-modal-body" v-if="modalFooter === 'set_csv'">
-          <span class="body-html-insert-target">
-            <!--
-            <span style="font-weight:bold;font-size:1.2em;font-style: oblique;">
-              Please Just Paste DataTable Here:
-            </span>
-          -->
-          </span>
-          <ul class="uk-tab uk-tab-flip" data-uk-tab="">
-            <span style="font-weight:bold;font-size:1.2em;font-style: oblique;line-height: 200%;">
-              Please Just Paste DataTable Here:
-            </span>
-            <li class="" aria-expanded="true" :class="infoTagObjAry[0] ? '' : 'uk-disabled'">
-              <a href="javascript:void(0)">Active</a>
-            </li>
-            <li class="uk-active" aria-expanded="false">
-              <a href="javascript:void(0)">CSV</a>
-            </li>
-          </ul>
-          <div class="csv-input-box" id="csv-input-box" contenteditable="true">
-            <table>
-              <tr>
-                <th style="padding-left:5px;padding-right:5px;"
-                    v-for="tag in mailTags">{{ tag }}</th>
-              </tr>
-            </table>
-          </div>
-        </div>
-        <!-- Footer -->
-        <div class="uk-modal-footer uk-text-right" v-if="modalFooter === 'set_csv'">
-          <div class="footer-wrapper" >
-            <button type="button" class="uk-button uk-button-warning" @click="dowloadCsvFile" style="float:left">
-              <i class="uk-icon-justify uk-icon-cloud-download"></i>
-              Template CSV
-            </button>
+          <!-- Footer -->
+          <div class="uk-modal-footer uk-text-right" v-if="modalFooter === 'mailto_send'">
             <button type="button" class="uk-button" @click="closeModal">Cancel</button>
-            <button type="button" class="uk-button uk-button-primary" @click="parseCsv">
-              <i class="uk-icon-justify uk-icon-bolt"></i>
-              Parse Table
-            </button>
-            <span class="footer-html-insert-target"></span>
+            <a class="uk-button uk-button-success" :href="modalButtonHref">
+              <i class="uk-icon-justify uk-icon-paper-plane"></i>
+              <span class="vmail_label"> Send!</span>
+            </a>
           </div>
         </div>
-
-
       </div>
-    </div>
+      </template>
+
+        <!-- set_csv -->
+      <template v-if="modalFooter === 'set_csv'">
+        <div class="uk-modal uk-open" style="display: block" @click.self="closeModal">
+          <div class="uk-modal-dialog">
+            <button type="button" class="uk-modal-close uk-close" @click="closeModal"></button>
+          <!-- Header -->
+          <div class="uk-modal-header" style="padding-top:15px;padding-bottom:12px;" v-if="modalFooter === 'set_csv'">
+            <div class="header-wrapper">
+              <b style="font-size:1.7em;color:#35495e;">Parse CSV or Table</b>
+            </div>
+          </div>
+          <!-- Body -->
+          <div class="my-modal-body" v-if="modalFooter === 'set_csv'">
+            <span class="body-html-insert-target">
+              <!--
+              <span style="font-weight:bold;font-size:1.2em;font-style: oblique;">
+                Please Just Paste DataTable Here:
+              </span>
+            -->
+            </span>
+            <ul class="uk-tab uk-tab-flip" data-uk-tab="">
+              <span style="font-weight:bold;font-size:1.2em;font-style: oblique;line-height: 200%;">
+                Please Just Paste DataTable Here:
+              </span>
+              <li class="" aria-expanded="true" :class="infoTagObjAry[0] ? '' : 'uk-disabled'">
+                <a href="javascript:void(0)">{{ infoTagObjAry.length }} Mail(s)</a>
+              </li>
+              <li class="uk-active" aria-expanded="false">
+                <a href="javascript:void(0)">CSV</a>
+              </li>
+            </ul>
+            <!-- csv paste area -->
+            <div class="csv-input-box" id="csv-input-box" contenteditable="true"
+                 v-show="modalFooter === 'set_csv'">
+              <table>
+                <tr>
+                  <th style="padding-left:5px;padding-right:5px;"
+                      v-for="tag in mailTags">{{ tag }}</th>
+                </tr>
+              </table>
+            </div>
+            <!-- csv mails rendering area -->
+            <div class="csv-input-box" v-show="modalFooter === 'rendering_csv' && infoTagObjAry.length > 0">
+
+            </div>
+          </div>
+          <!-- Footer -->
+          <div class="uk-modal-footer uk-text-right"
+              v-if="modalFooter === 'set_csv'"
+              v-show="modalFooter === 'set_csv'">
+              <div class="footer-wrapper" >
+                <button type="button" class="uk-button uk-button-warning" @click="dowloadCsvFile" style="float:left">
+                  <i class="uk-icon-justify uk-icon-cloud-download"></i>
+                  Template CSV
+                </button>
+                <button type="button" class="uk-button" @click="closeModal">Cancel</button>
+                <button type="button" class="uk-button uk-button-primary" @click="parseCsv">
+                  <i class="uk-icon-justify uk-icon-bolt"></i>
+                  Parse Table
+                </button>
+                <span class="footer-html-insert-target"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </transition>
   </div>
 </template>
 
@@ -151,13 +168,16 @@
       return {
         infoTagObj: {},
         infoTagObjAry: [], // parsed from CSV
-        modalDisplay: 'none',
-        modalFooter: 'mailto_send',
         toAddress: [],
         ccAddress: [],
         bccAddress: [],
         mailSubjct: '',
-        mailText: ''
+        mailText: '',
+        /* **** modal show/hide control elements **** */
+        /* modalDisplay: none(default), block */
+        modalDisplay: 'none',
+        /* modalFooter: mailto_send(default) , set_csv , rendering_csv  */
+        modalFooter: ''
       }
     },
     computed: {
@@ -171,6 +191,9 @@
         urlStr += ('body=' + bodyStr)
         // console.log(urlStr)
         return urlStr
+      },
+      mailTextToShow: function () {
+        return this.mailText.replace(/\r|\n|\r\n/g, '<br>')
       }
     },
     methods: {
@@ -214,7 +237,8 @@
             */
             this.modalFooter = 'mailto_send' // set modal footer mode to mailto mode
             // modalHelper.openModal('Mail To: ' + this.toAddress[0], this.mailText.replace(/\r|\n|\r\n/g, '<br>'), footerBtn)
-            modalHelper.openModal(null, this.mailText.replace(/\r|\n|\r\n/g, '<br>'), null)
+            // modalHelper.openModal(null, this.mailText.replace(/\r|\n|\r\n/g, '<br>'), null)
+            modalHelper.openModal(null, null, null)
             this.modalDisplay = 'block'
             console.log('mailto', this.mailText, this.mailSubjctRaw, this.mailSubjct)
         }
@@ -246,10 +270,20 @@
         modalHelper.closeModal().then(
           this.modalDisplay = 'none'
         )
+        this.modalFooter = ''
       }
     }
   }
 </script>
+
+<style media="screen">
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+  }
+  .fade-enter, .fade-leave-active {
+    transition: opacity 0.3s linear, transform 0.3s ease-out;
+  }
+</style>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
