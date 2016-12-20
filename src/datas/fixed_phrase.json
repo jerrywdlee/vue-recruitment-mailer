@@ -48,5 +48,13 @@
     "bcc" : [],
     "subject" : "@#studentName#@様、おめでとうございます",
     "mailText" : "@#studentName#@さん、こんにちは！   \n@#companyName#@　@#contactPerson#@です。   \n   \n先日は弊社選考にお越しいただき、ありがとうございました。\nさて、先般実施しました選考の結果、選考に合格されましたので、\nお知らせ致します。\n   \nつきましては、下記の日程で次回選考を実施致しますので、   \nご出席いただきますようお願い致します。\nなお、ご都合の悪い場合には、大変お手数ではありますが、\n人事部：採用担当　@#contactPerson#@（@#telPhone#@）までご連絡下さい。   \n   \n【日時】   \n・@#month#@月@#day#@日（@#week#@）@#time#@～   \n   \n【会場】   \n@#address#@   \n（@#station#@駅から徒歩@#walkTime#@分）   \n   \n【持ち物】   \n@#baggage#@\n宜しくお願い致します。   \n   \n------------------------------------------   \n@#companyName#@   \n@#contactDep#@　@#contactPerson#@   \n------------------------------------------ \n\n"
+  },
+  {
+    "name" : "The MIT Licence",
+    "to" : [],
+    "cc" : [],
+    "bcc" : [],
+    "subject" : "The MIT Licence",
+    "mailText" : "MIT License\nCopyright (c) @#year#@ @#copyrightHolders#@\n\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE."
   }
 ]
