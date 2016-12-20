@@ -44,4 +44,4 @@ npm run deploy # old deployed files in ./docs_backs
 
 ## License
 [MIT](http://opensource.org/licenses/MIT)
-Copyright (c) 2016~2017 Jerry Lee
+[Copyright (c) 2016~2017 Jerry Lee](https://github.com/jerrywdlee/vue-recruitment-mailer/blob/master/LICENSE)

@@ -786,7 +786,7 @@ export default {
     opacity: 0.1;
   }
   div.workspace-background>img{
-    margin-bottom: 45px;
+    margin-bottom: 60px;
 
   }
 

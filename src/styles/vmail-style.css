@@ -88,7 +88,7 @@ h1 {
   }*/
 }
 
-@media (max-width: 959px) {
+@media (min-width: 768px) and (max-width: 959px) {
   div.mailRender.uk-panel, div.tagbar.uk-panel {
     height: 37vh;
   }
@@ -126,5 +126,11 @@ h1 {
   }
   .github-banner>b{
     display: none;
+  }
+}
+
+@@media (min-width: 959px) {
+  div.workspace-background>img{
+    margin-bottom: 75px !important;
   }
 }
