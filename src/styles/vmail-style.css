@@ -111,11 +111,20 @@ h1 {
   img.vmail-logo{
     height: 30px !important;
   }
+  .github-banner{
+    top: 9px !important;
+  }
 }
 
 @media (max-width: 450px) {
   div.adress-inner-div>table.vmail_to_address, div.adress-inner-div>table.vmail_cc_address {
     width: 98%;
     float: left;
+  }
+  .github-banner{
+    right: 5px !important;
+  }
+  .github-banner>b{
+    display: none;
   }
 }
