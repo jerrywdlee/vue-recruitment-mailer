@@ -1,7 +1,7 @@
 <div style="text-align: center;"><div>
 
 # vue-recruitment-mailer
-![Alt text](./src/assets/vue-mailer-logo-v02.svg)
+![Alt text](https://raw.githubusercontent.com/jerrywdlee/vue-recruitment-mailer/master/src/assets/vue-mailer-logo-v02.svg)
 
 <div style="text-align: left;"><div>
 
