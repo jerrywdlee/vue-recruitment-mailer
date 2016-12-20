@@ -7,7 +7,10 @@
         </a>
         <h1 class="uk-hidden-small">Vue Recruit Mailer</h1>
         <h2 class="uk-visible-small">Vue R Mailer</h2>
-        <span class="uk-badge uk-badge-success vmail-version" style="">v0.0.23</span>
+        <span class="uk-badge uk-badge-success vmail-version" style="">v0.0.42</span>
+        <a class="github-banner uk-button uk-button-small" target="_blank" href="https://github.com/jerrywdlee/vue-recruitment-mailer">
+          <i class="uk-icon-github"></i><b>&nbsp;Fork me!</b>
+        </a>
       </div>
     </nav>
     <!--
@@ -76,5 +79,20 @@ export default {
     padding-top: 3px;
     padding-bottom: 2px;
     vertical-align: middle;
+  }
+  .github-banner{
+    /*float: right;*/
+    box-shadow: 0 0 0 .10px rgba(0,0,0,0.4);
+    position: absolute;
+    top: 14px;
+    right: calc(1% + 10px);
+    z-index: 10;
+    /*
+    transform:rotate(25deg);
+    -ms-transform:rotate(25deg);
+    -moz-transform:rotate(25deg);
+    -webkit-transform:rotate(25deg);
+    -o-transform:rotate(25deg);
+    */
   }
 </style>

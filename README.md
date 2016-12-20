@@ -1,4 +1,9 @@
+<div style="text-align: center;"><div>
+
 # vue-recruitment-mailer
+![Alt text](./src/assets/vue-mailer-logo-v02.svg)
+
+<div style="text-align: left;"><div>
 
 > A Vue.js project will create mails from templates and send then. May best used in recruitment.
 

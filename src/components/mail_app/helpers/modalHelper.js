@@ -2,7 +2,7 @@ export default {
   closeModal: function () {
     return new Promise(function (resolve, reject) {
       try {
-        document.getElementById('modal').className = 'uk-modal uk-close'
+        // document.getElementById('modal').className = 'uk-modal uk-close'
         // document.querySelector('.uk-modal-header').innerHTML = ''
         // document.querySelector('.my-modal-body').innerHTML = ''
         // document.querySelector('.uk-modal-footer').innerHTML = ''
@@ -26,7 +26,7 @@ export default {
       document.querySelector('.footer-html-insert-target').innerHTML = footer
     }
 
-    document.getElementById('modal').className = 'uk-modal uk-open'
+    // document.getElementById('modal').className = 'uk-modal uk-open'
     // return false
   }
 }
