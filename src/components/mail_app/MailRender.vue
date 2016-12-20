@@ -111,11 +111,11 @@
               <span v-html="csvRenderingLabel" style="font-weight:bold;font-size:1.2em;font-style: oblique;line-height: 200%;">
                 Please Just Paste DataTable Here:
               </span>
-              <li aria-expanded="true" :class="[infoTagObjAry[0]?'':'uk-disabled',modalType === 'rendering_csv'?'uk-active':'']">
+              <li aria-expanded="false" :class="[infoTagObjAry[0]?'':'uk-disabled',modalType === 'rendering_csv'?'uk-active':'']">
                 <a href="javascript:void(0)" @click="renderCsvMails">{{ infoTagObjAry.length }} Mail(s)</a>
               </li>
-              <li :class="modalType === 'set_csv'? 'uk-active':''" aria-expanded="true">
-                <a href="javascript:void(0)" @click="setCsv">CSV</a>
+              <li :class="modalType === 'set_csv'? 'uk-active':''" aria-expanded="false">
+                <a href="javascript:void(0)" @click="setCsv">Data Table</a>
               </li>
             </ul>
             <!-- csv paste area -->
@@ -392,7 +392,11 @@
     watch: {
       infoTagObjIndex: function (val) {
         console.log('infoTagObjIndex', val)
-        this.infoTagObj = this.infoTagObjAry[this.infoTagObjIndex]
+        if (this.infoTagObjIndex >= 0) {
+          this.infoTagObj = this.infoTagObjAry[this.infoTagObjIndex]
+        } else {
+          this.infoTagObj = this.dirInputInfoTagObj
+        }
         // this.modalType = 'rendering_csv'
         this.csvRenderingLabel = `Subject: ${this.mailSubjct}`
       },
