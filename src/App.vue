@@ -84,9 +84,9 @@ export default {
     vertical-align: middle;
   }
   .vmail-header{
-    margin-left: 5px;
+    /*margin-left: 5px;
     margin-right: 5px;
-    width: 100vw;
+    width: 100vw;*/
   }
   .github-banner, .paypal-banner{
     float: left;
