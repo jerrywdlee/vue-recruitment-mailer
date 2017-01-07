@@ -113,6 +113,13 @@ h1 {
   }
   .github-banner{
     top: 9px !important;
+    margin-top: 3px !important;
+  }
+  .github-banner>b{
+    display: none;
+  }
+  div.mailRender,div.tagbar{
+    height: 250px;
   }
 }
 
@@ -123,13 +130,22 @@ h1 {
   }
   .github-banner{
     right: 5px !important;
+    font-size: 0.9em;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
   }
-  .github-banner>b{
+  .vmail-header{
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .vmail-version{
     display: none;
   }
 }
 
-@@media (min-width: 959px) {
+@media (min-width: 959px) {
   div.workspace-background>img{
     margin-bottom: 75px !important;
   }

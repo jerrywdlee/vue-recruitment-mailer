@@ -2,14 +2,17 @@
   <div id="app">
     <nav class="tm-navbar uk-navbar uk-navbar-attached">
       <div class="uk-container uk-container-center vmail-header">
+        <a class="github-banner uk-button uk-button-small" target="_blank" href="https://github.com/jerrywdlee/vue-recruitment-mailer">
+          <i class="uk-icon-github"></i><b>&nbsp;Fork me !</b>
+        </a>
         <a href="">
           <img class="vmail-logo" src="./assets/vue-mailer-logo-v02.svg" alt="vue-mailer-logo">
         </a>
         <h1 class="uk-hidden-small">Vue Recruit Mailer</h1>
         <h2 class="uk-visible-small">Vue R Mailer</h2>
         <span class="uk-badge uk-badge-success vmail-version" style="">v0.0.42</span>
-        <a class="github-banner uk-button uk-button-small" target="_blank" href="https://github.com/jerrywdlee/vue-recruitment-mailer">
-          <i class="uk-icon-github"></i><b>&nbsp;Fork me!</b>
+        <a class="github-banner paypal-banner uk-button uk-button-small" target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=84XMN9L3XG4LE">
+          <i class="uk-icon-paypal"></i><b>&nbsp;Donate !</b>
         </a>
       </div>
     </nav>
@@ -80,10 +83,16 @@ export default {
     padding-bottom: 2px;
     vertical-align: middle;
   }
-  .github-banner{
-    /*float: right;*/
+  .vmail-header{
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 100vw;
+  }
+  .github-banner, .paypal-banner{
+    float: left;
     box-shadow: 0 0 0 .10px rgba(0,0,0,0.4);
-    position: absolute;
+    margin-top: 9px;
+    /*position: absolute;
     top: 14px;
     right: calc(1% + 10px);
     z-index: 10;
@@ -94,5 +103,8 @@ export default {
     -webkit-transform:rotate(25deg);
     -o-transform:rotate(25deg);
     */
+  }
+  .paypal-banner{
+    float: right;
   }
 </style>
