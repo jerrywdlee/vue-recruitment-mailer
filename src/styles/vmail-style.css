@@ -121,6 +121,15 @@ h1 {
   div.mailRender,div.tagbar{
     height: 250px;
   }
+  .uk-modal-footer button.uk-button>span{
+    display: none;
+  }
+}
+
+@media (max-width: 533px) {
+  .uk-modal-footer a.uk-button>span{
+    display: none;
+  }
 }
 
 @media (max-width: 450px) {

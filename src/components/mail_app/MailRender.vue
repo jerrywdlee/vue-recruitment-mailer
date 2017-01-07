@@ -155,10 +155,10 @@
               </div>
               <!-- Footer -->
               <div class="uk-modal-footer uk-text-center">
-                <button type="button" class="uk-button" @click="setCsv" style="float:left">
+                <a type="button" class="uk-button" @click="setCsv" style="float:left">
                   <i class="uk-icon-justify uk-icon-th-list"></i>
-                  Set Table
-                </button>
+                  <span class="vmail_label">Set Table</span>
+                </a>
                 <button class="uk-button" :disabled="infoTagObjIndex<1" @click="infoTagObjIndex--">
                   <i class="uk-icon-backward"></i>&nbsp;<span>Prev</span>
                 </button>
@@ -169,6 +169,10 @@
                 <a class="uk-button uk-button-success" :href="modalButtonHref" style="float:right">
                   <i class="uk-icon-justify uk-icon-paper-plane"></i>
                   <span class="vmail_label"> Send!</span>
+                </a>
+                <a class="uk-button uk-button-warning" href="javascript:void(0)" @click="downloadMailsJson" style="float:right;margin-right:5px">
+                  <i class="uk-icon-justify uk-icon-download"></i>
+                  <span class="vmail_label"> Mails CSV</span>
                 </a>
               </div>
             </template>
@@ -323,7 +327,7 @@
         // this.modalDisplay = 'block'
       },
       dowloadCsvFile: function (e) {
-        let csvTempUrl = csvHelper.createCsvFile(this.mailTags)
+        let csvTempUrl = csvHelper.createCsvFileUrl([this.mailTags]) // must be a 2d array
         // console.log(csvTempUrl)
         csvHelper.downloadFile(csvTempUrl, `Template [${this.mailSubjctRaw}].csv`)
       },
@@ -376,6 +380,23 @@
           this.csvRenderingLabel = `Subject: ${this.mailSubjct}`
         }
       },
+      downloadMailsJson: function (e) {
+        let mailTempObj = {
+          mailTemplate: this.mailTemplate,
+          mailSubjctRaw: this.mailSubjctRaw,
+          toAddressAry: this.toAddressAry,
+          ccAddressAry: this.ccAddressAry,
+          bccAddressAry: this.bccAddressAry
+        }
+        csvHelper.createMailsJson(this.mailReg, this.infoTagObjAry, mailTempObj, (tmpMailsAry) => {
+          console.log('tmpMailsAry')
+          console.log(tmpMailsAry)
+          csvHelper.stringifyObj2CsvAry(tmpMailsAry, (csvAry) => {
+            let csvTempUrl = csvHelper.createCsvFileUrl(csvAry)
+            csvHelper.downloadFile(csvTempUrl, `Mails [${(new Date()).toLocaleString()}].csv`)
+          })
+        })
+      },
       closeModal: function (e) {
         // modalHelper.closeModal().then(
           // this.modalDisplay = 'none'
@@ -399,6 +420,13 @@
         }
         // this.modalType = 'rendering_csv'
         this.csvRenderingLabel = `Subject: ${this.mailSubjct}`
+      },
+      csvRenderingLabel: function (val) {
+        console.log(window.innerWidth)
+        let maxTextNumber = window.innerWidth / 23
+        if (val.length > maxTextNumber) {
+          this.csvRenderingLabel = this.csvRenderingLabel.substr(0, (maxTextNumber - 3)) + '...'
+        }
       },
       mailTags: function (val) {
         // reset saved csv if tags changed

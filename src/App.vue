@@ -10,7 +10,7 @@
         </a>
         <h1 class="uk-hidden-small">Vue Recruit Mailer</h1>
         <h2 class="uk-visible-small">Vue R Mailer</h2>
-        <span class="uk-badge uk-badge-success vmail-version" style="">v0.0.42</span>
+        <span class="uk-badge uk-badge-success vmail-version" style="">v0.0.74</span>
         <a class="github-banner paypal-banner uk-button uk-button-small" target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=84XMN9L3XG4LE">
           <i class="uk-icon-paypal"></i><b>&nbsp;Donate !</b>
         </a>
